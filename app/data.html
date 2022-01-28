@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>IHM expert -> data</title>
+    <!-- following stylesheet allows little download icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            font-family: "Helvetica", "Arial", sans-serif;
+            line-height: 1.5;
+            padding: 1em 1em;
+        }
+        
+        h1 {
+            text-align: center;
+        }
+        
+        .table {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        td,
+        th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        tr:hover {
+            background-color: #ddd;
+        }
+        
+        th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        #downloadButton {
+            background-color: white;
+            border: 2px solid #4CAF50;
+            border-radius: 4px;
+            color: black;
+            padding: 12px 30px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.2s ease-in-out;
+        }
+        /* Darker background on mouse-over */
+        
+        #downloadButton:hover {
+            background-color: #4CAF50;
+            color: white;
+            /*RoyalBlue;
+            box-shadow: 5px 12px 16px 0 rgba(0, 0, 0, 0.25), 0 17px 50px 0 rgba(0, 0, 0, 0.19);*/
+        }
+        
+        thead th {
+            top: 0;
+            position: sticky;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>DATA</h1>
+    <button id="downloadButton"><i class="fa fa-download"></i> Download CSV file</button>
+    <script src="/data.js" defer></script>
+    <p></p>
+    <div id="output"></div>
+</body>
+
+</html>
