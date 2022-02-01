@@ -21,3 +21,20 @@ Ce biais de la récompense instantanée est relativement bien couvert par la lit
 
 Static version : https://ulrych8.github.io/IHMexpert/index.html
 ------
+
+(temporaire)
+cahier des charges :
+lire et simplifier le code
+configurer le slider (faire des tests utilisateurs pour fixer)
+En general : regler les parametres du projet pour etre agreable
+faire tester le final aux users pour recolter des donnes et ensuite voir la suite du projet
+
+---------
+fichier dans le dossier:
+2 img (.png) pour le lock et l'unlock
+3 database (.db) 1 pour les settings et 2 pour les datas colectées
+7 pages html (.html) pour les pages internet (4 pages tuto pour les 3 etape, 1 main page, 1 settings,1 data)
+3 css style, setting et tuto
+6 (.js) pour chacun des pages html
+3 (.js) en plus confetti (faire des confetti qd tu gg?),verification(tablette ou mobile / navigateur),main(ya tout le code)
+2 fichier (package  .json) 1 fichier shrinkwave.yaml (jsp sert a quoi)
