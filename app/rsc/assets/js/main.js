@@ -1212,9 +1212,9 @@ function Game() {
 
     //load img
     var imgLock = new Image();
-    imgLock.src = 'lock.png';
+    imgLock.src = 'rsc/img/lock.png';
     var imgUnlock = new Image();
-    imgUnlock.src = 'unlock.png';
+    imgUnlock.src = 'rsc/img/unlock.png';
 
     //set up context
     var ctxLearning = learningCanvas.getContext("2d");

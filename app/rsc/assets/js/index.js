@@ -13,7 +13,7 @@ app.use(express.static('./'));
 app.use(express.json( /*{limit:'1mb'} */ ));
 
 //database of users informations
-const database = new Datastore('database.db');
+const database = new Datastore('rsc/data/database.db');
 database.loadDatabase();
 //erase database
 //database.remove({}, { multi: true }, function(err, numRemoved) {
@@ -21,7 +21,7 @@ database.loadDatabase();
 //});
 
 //database of gameParameters
-const gameParameters = new Datastore('gameParameters.db');
+const gameParameters = new Datastore('rsc/data/gameParameters.db');
 gameParameters.loadDatabase();
 var betweenElementIndexMemory = [];
 
