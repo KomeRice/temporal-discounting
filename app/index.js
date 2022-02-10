@@ -1,31 +1,24 @@
 const express = require('express');
 const Datastore = require('nedb');
-require('dotenv').config;
-const cors = require('cors');
 const nodemailer = require("nodemailer");
 const app = express();
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`listening at ${port}...`));
 
-/*app.use(cors);*/
 app.use(express.static('./'));
-//to parse incomming data as json
-app.use(express.json( /*{limit:'1mb'} */ ));
+app.use(express.json());
 
-//database of users informations
 const database = new Datastore('rsc/data/database.db');
 database.loadDatabase();
-//erase database
-//database.remove({}, { multi: true }, function(err, numRemoved) {
+// database.remove({}, { multi: true }, function(err, numRemoved) {
 //    database.loadDatabase(function(err) {});
-//});
+// });
 
-//database of gameParameters
 const gameParameters = new Datastore('rsc/data/gameParameters.db');
 gameParameters.loadDatabase();
-var betweenElementIndexMemory = [];
+const betweenElementIndexMemory = [];
 
-app.get('/api' /*getData*/ , (request, response) => {
+app.get('/api', (request, response) => {
     database.find({}, (err, data) => {
         if (err) {
             response.end();
@@ -43,10 +36,7 @@ app.post('/api', (request, response) => {
     database.insert(data);
     console.log(data);
 
-    //save which condition just occured
     betweenElementIndexMemory[data.betweenElementIndex] += 1;
-
-    /* repondre au post */
     response.json({
         status: 'success',
         data: data
@@ -54,19 +44,17 @@ app.post('/api', (request, response) => {
 });
 
 app.get('/gameParameters' /*getData*/ , (request, response) => {
-    console.log('I got a request to send game parameters from main page');
-
     gameParameters.find({}, (err, data) => {
         if (err) {
             response.end();
             return;
         }
 
-        if (betweenElementIndexMemory.length != data[0]["betweenElements"].length) {
+        if (betweenElementIndexMemory.length !== data[0]["betweenElements"].length) {
             betweenElementIndexMemory.length = data[0]["betweenElements"].length;
             betweenElementIndexMemory.fill(0);
         }
-        currentBetweenElement = argMin(betweenElementIndexMemory);
+        let currentBetweenElement = argMin(betweenElementIndexMemory);
         const currentBetweenJson = data[0]["betweenElements"][currentBetweenElement];
 
         data[0]['nbLock'] = currentBetweenJson['nbLock'];
