@@ -1,4 +1,4 @@
-body {
+/*body {
     overflow-y: hidden;
 }
 
@@ -24,7 +24,7 @@ body {
 #targetCanvas {
     position: absolute;
 }
-
+*/
 button {
     cursor: pointer;
     border-radius: 4px;
