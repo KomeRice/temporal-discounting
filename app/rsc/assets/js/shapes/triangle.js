@@ -1,6 +1,6 @@
 const shape = require('shape.js')
 
-class Circle extends Shape {
+class Triangle extends Shape {
     constructor(x, y, minSize, selectable, context) {
         let height = minSize / 2
         super(x,y,height,height,selectable,context);
