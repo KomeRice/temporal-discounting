@@ -1,7 +1,10 @@
+/*data*/
+
 .classic_font{
 	font-family: "Helvetica", "Arial", sans-serif;
 	line-height: 1.5;
 	padding: 1em 1em;
+	margin: 20px 20px 20px 20px;
 }
 
 .align_center{
@@ -22,6 +25,7 @@ td,
 th {
 	border: 1px solid #ddd;
 	padding: 8px;
+	font-weight: normal;
 }
 
 tr:nth-child(even) {
@@ -36,7 +40,7 @@ th {
 	padding-top: 12px;
 	padding-bottom: 12px;
 	text-align: left;
-	background-color: #4CAF50;
+	background-color: #1AA7EC;
 	color: white;
 }
 
@@ -48,7 +52,7 @@ thead th {
 
 #downloadButton {
 	background-color: white;
-	border: 2px solid #4CAF50;
+	border: 2px solid #1AA7EC;
 	border-radius: 4px;
 	color: black;
 	padding: 12px 30px;
@@ -59,7 +63,7 @@ thead th {
 /* Darker background on mouse-over */
 
 #downloadButton:hover {
-	background-color: #4CAF50;
+	background-color: #1AA7EC;
 	color: white;
 	/*RoyalBlue;
 	box-shadow: 5px 12px 16px 0 rgba(0, 0, 0, 0.25), 0 17px 50px 0 rgba(0, 0, 0, 0.19);*/
@@ -89,3 +93,147 @@ thead th {
     position: absolute;
 }
 
+/*Setting*/
+
+.blue_background {
+    background-color: #1AA7EC;
+}
+
+.transition_2{
+    transition: all 0.2s ease-in-out;	
+}
+
+.margin{
+	margin: 15px 0px;
+}
+.margin20{
+	margin: 20px;
+}
+.margin100{
+	margin: 100px 100px;
+}
+.hidden{
+	display:none;
+}
+
+.pointer{
+	cursor: pointer;
+}
+
+#after-login {
+    display: block;
+}
+
+.field-password {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    height: 50px;
+    width: 400px;
+    align-items: center;
+    border-radius: 5px;
+    justify-content: space-between;
+}
+
+.commentText {
+    color: rgb(107, 107, 107);
+}
+
+.BetweenElement {
+    border-left: solid 0.5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding-left: 15px;
+}
+
+.password-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    transform: translate(-50%, -50%);
+}
+
+.password-form i {
+    padding: 10px;
+}
+
+.LFloat{
+	float: left;
+}
+
+.RFloat{
+	float: right;
+}
+
+#input-password {
+    background: none;
+    border: none;
+    flex: 1;
+    height: 50px;
+    width: 50px;
+    outline: none;
+}
+
+#password-arrow {
+    cursor: pointer;
+}
+
+#nbForms {
+    margin: 2px 12px;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    30% {
+        transform: translate(-50%, -50%) rotate(5deg);
+    }
+    60% {
+        transform: translate(-50%, -50%) rotate(-5deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+}
+
+.loader {
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid #3498db;
+    width: 20px;
+    height: 20px;
+    -webkit-animation: spin 2s linear infinite;
+    /* Safari */
+    animation: spin 2s linear infinite;
+}
+
+.border{
+	border:double thick;
+}
+
+/* Safari */
+
+
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
