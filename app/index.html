@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Usert study in Human-Computer Interaction </title>
-    <link rel="stylesheet" href="rsc/assets/css/style.css">
+    <title>User study in Human-Computer Interaction </title>
+    <link rel="stylesheet" href="rsc/assets/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
@@ -17,33 +17,32 @@
         <div class="blackBG"></div>
         <div id="explainGameBox" class="infoBox">
             <div class="infoTitle">Experience</div>
-            <pre>
+			<pre>
 Congratulations! You successfully performed the tutorial. You can now perform the main experiment.
-</pre>
-            <pre>
+			</pre>
+			<pre>
 Your objective is to finish the <span id="nTask">experience</span> <b>as fast as possible</b>.
-</pre>
-            <pre>
+			</pre>
+			<pre>
 Each task consists of selecting all symbols of the target shape <span id="shapeList"></span>.
 - You can use the first method on the left panel 
-    * Optionally, you can unlock one locker (right panel) to make the second method available
+	* Optionally, you can unlock one locker (right panel) to make the second method available
 - Or you can use the second method once all the lockers have been unlocked.
-</pre>
-            <pre>
+			</pre>
+			<pre>
 Note: All shapes do not have the same frequencies. Some shapes will appear more frequently than the other.
-</pre>
-            <pre>
+			</pre>
+			<pre>
 As soon as you are ready, you can click on the button start
-            </pre>
-
+			</pre>
             <div class="infoDivButton">
                 <button class="infoButton" onclick="Game();document.getElementById('explainGame').style.display='none';">START</button>
             </div>
         </div>
     </div>
 
-    <div id="mobileRestriction" style="display: none;">
-        <div class="blackBG" style="background-color: #4CAF50;"></div>
+    <div id="mobileRestriction" class="hidden">
+        <div class="blackBG blue_background" ></div>
         <div class="infoBox">
             <div class="infoTitle">IHM Expert</div>
             <pre>
@@ -54,8 +53,8 @@ website isn't suited for mobile or tablet.
         </div>
     </div>
 
-    <div id="ipRestriction" style="display: none;">
-        <div class="blackBG" style="background-color: #4CAF50;"></div>
+    <div id="ipRestriction" class="hidden">
+        <div class="blackBG blue_background" ></div>
         <div class="infoBox">
             <div class="infoTitle">IHM Expert</div>
             <pre>
@@ -74,11 +73,11 @@ can not do the experiment more than once.
     <canvas id="targetCanvas"></canvas>
     <canvas id="learningCanvas"></canvas>
 
-    <button id="nextButton" style="display: none;">Next</button>
+    <button id="nextButton" style="display:none;" >Next</button>
 
-    <canvas id="canvasConfetti" style="position: absolute;top: 0;left: 0;"></canvas>
+    <canvas id="canvasConfetti" class="confetti"></canvas>
 
-    <div id="endGame" class="blackBG" style="display: none;">
+    <div id="endGame" class="blackBG hidden">
         <div id="endGameBox" class="infoBox">
             <div class="infoTitle">END</div>
             <pre>
