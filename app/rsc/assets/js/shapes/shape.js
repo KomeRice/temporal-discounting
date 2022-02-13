@@ -15,7 +15,7 @@ class Shape{
         this.vibrateAnimationStep = 8
         this.colorUnlit = "black"
         this.colorLit = "gray"
-        this.marginFactor = 0.1
+        this.marginFactor = 0.3
     }
 
     vibrate(){
@@ -33,3 +33,5 @@ class Shape{
         this.vibrateAnimationStep--;
     }
 }
+
+export default Shape

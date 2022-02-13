@@ -1,4 +1,4 @@
-const shape = require('shape.js')
+import Shape from "./shape.js"
 
 class Circle extends Shape {
     constructor(x, y, minSize, selectable, context) {
@@ -11,6 +11,7 @@ class Circle extends Shape {
         this.left = x - radius;
         this.colorUnlit = "royalblue"
         this.colorLit = "lightsteelblue"
+        this.marginFactor = minSize / 16
     }
 
     draw() {
@@ -20,7 +21,7 @@ class Circle extends Shape {
         if (this.selected || this.unlocked) {
             this.ctx.fillStyle = this.colorUnlit;
             this.ctx.beginPath();
-            this.ctx.arc(this.x, this.y, this.radius + this.radius * this.marginFactor,
+            this.ctx.arc(this.x, this.y, this.radius + this.marginFactor,
                 0, Math.PI * 2);
             this.ctx.fill();
             this.ctx.fillStyle = this.colorLit; //COLOR_SELECT;
@@ -43,3 +44,5 @@ class Circle extends Shape {
             Math.abs(this.y - y) < this.radius;
     }
 }
+
+export default Circle

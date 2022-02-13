@@ -1,4 +1,4 @@
-const shape = require('shape')
+import Shape from "./shape.js"
 
 class Cross extends Shape {
     constructor(x, y, minSize, selectable, context) {
@@ -15,6 +15,7 @@ class Cross extends Shape {
         this.rect2y = y - this.thickness / 2;
         this.colorUnlit = "limegreen";
         this.colorLit = "lightgreen";
+        this.marginFactor = minSize / 16
     }
 
     draw() {
@@ -23,14 +24,14 @@ class Cross extends Shape {
         }
         if (this.selected || this.unlocked) {
             this.ctx.fillStyle = this.colorUnlit
-            this.ctx.fillRect(this.rect1x - this.width * this.marginFactor,
-                this.rect1y  - this.height * this.marginFactor,
-                this.thickness + this.thickness * this.marginFactor,
-                this.h + this.h * this.marginFactor);
-            this.ctx.fillRect(this.rect2x - this.width * this.marginFactor,
-                this.rect2y  - this.height * this.marginFactor,
-                this.width + this.width * this.marginFactor,
-                this.thickness + this.thickness * this.marginFactor);
+            this.ctx.fillRect(this.rect1x - this.marginFactor,
+                this.rect1y - this.marginFactor,
+                this.thickness + this.marginFactor * 2,
+                this.height + this.marginFactor * 2);
+            this.ctx.fillRect(this.rect2x - this.marginFactor,
+                this.rect2y  - this.marginFactor,
+                this.width + this.marginFactor * 2,
+                this.thickness + this.marginFactor * 2);
             this.ctx.fillStyle = this.colorLit;
         } else if (this.highlight) {
             this.ctx.fillStyle = this.colorLit;
@@ -43,11 +44,13 @@ class Cross extends Shape {
 
     contains(x, y, easyMode=false) {
         if (easyMode) {
-            return this.left < x < this.right && this.top < y < this.bottom;
+            return this.left < x && x < this.right && this.top < y && y < this.bottom;
         }
-        return this.rect1x < x < this.rect1x + this.thickness &&
-            this.rect1y < y < this.rect1y + this.height ||
-            this.rect2x < x < this.rect2x + this.width &&
-            this.rect2y < y < this.rect2y + this.thickness;
+        return this.rect1x < x && x < this.rect1x + this.thickness &&
+            this.rect1y < y && y < this.rect1y + this.height ||
+            this.rect2x < x && x < this.rect2x + this.width &&
+            this.rect2y < y && y < this.rect2y + this.thickness;
     }
 }
+
+export default Cross

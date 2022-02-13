@@ -1,4 +1,4 @@
-const shape = require('shape.js')
+import Shape from "./shape.js"
 
 class Square extends Shape{
     constructor(x, y, minSize, selectable, context) {
@@ -10,6 +10,7 @@ class Square extends Shape{
         this.left = x - size / 2;
         this.colorUnlit = "crimson";
         this.colorLit = "lightpink";
+        this.marginFactor = minSize / 16
     }
 
     draw() {
@@ -18,10 +19,10 @@ class Square extends Shape{
         }
         if (this.selected || this.unlocked) {
             this.ctx.fillStyle = this.colorUnlit;
-            this.ctx.fillRect(this.left - this.width * this.marginFactor,
-                this.top - this.height * this.marginFactor,
-                this.width + this.width * this.marginFactor,
-                this.height + this.height * this.marginFactor);
+            this.ctx.fillRect(this.left - this.marginFactor,
+                this.top - this.marginFactor,
+                this.width + this.marginFactor * 2,
+                this.height + this.marginFactor * 2);
             this.ctx.fillStyle = this.colorLit;
         } else if (this.highlight) {
             this.ctx.fillStyle = this.colorLit;
@@ -32,6 +33,8 @@ class Square extends Shape{
     }
 
     contains(x, y) {
-        return this.left < x < this.right && this.top < y < this.bottom;
+        return this.left < x && x < this.right && this.top < y && y < this.bottom;
     }
 }
+
+export default Square
