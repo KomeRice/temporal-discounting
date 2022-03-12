@@ -25,6 +25,9 @@ const gameParameters = new Datastore('rsc/data/gameParameters.db');
 gameParameters.loadDatabase();
 var betweenElementIndexMemory = [];
 
+const express = require('./myexpress-init/node_modules/express')
+app.use(express.static(__dirname + '/'));
+
 app.get('/api' /*getData*/ , (request, response) => {
     database.find({}, (err, data) => {
         if (err) {

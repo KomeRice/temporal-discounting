@@ -121,7 +121,7 @@ thead th {
 }
 
 #after-login {
-    display: block;
+    display: none;
 }
 
 .field-password {
