@@ -258,7 +258,7 @@ const forms = [
 async function updateSettings() {
     //updating effect 
     document.getElementById('indexRef').style.display = 'none';
-    document.getElementById('waitSpinner').style.display = '';
+    document.getElementById('waitSpinner').style.display = 'block';
     setTimeout(() => { document.getElementById('waitSpinner').style.display = 'none'; }, 2000);
     //----------------  real updates  -------------------------------
     //blocks to do
@@ -325,5 +325,5 @@ async function updateSettings() {
     const response = await fetch('/settings', gameSettings);
     const res = await response.json();
     console.log(res);
-    setTimeout(() => { document.getElementById('indexRef').style.display = ''; }, 2000);
+    setTimeout(() => { document.getElementById('indexRef').style.display = 'block'; }, 2000);
 }

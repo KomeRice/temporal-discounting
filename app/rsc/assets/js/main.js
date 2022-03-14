@@ -69,7 +69,6 @@ async function setGameParameters() {
             updateIntroMsg(STEP, formsList);
         })
         .catch(err => {
-            console.log("erreur dans la mise en place des parametres");
             console.log(err);
         })
         /*.then(() => {
@@ -212,7 +211,10 @@ function Game() {
             }
             if (this.selected || this.unlocked) {
                 this.ctx.fillStyle = COLOR_SQUARE;
-                this.ctx.fillRect(this.left - SELECT_MARGIN / 2, this.top - SELECT_MARGIN / 2, this.w + SELECT_MARGIN, this.h + SELECT_MARGIN);
+                this.ctx.fillRect(this.left - SELECT_MARGIN / 2,
+                    this.top - SELECT_MARGIN / 2,
+                    this.w + SELECT_MARGIN,
+                    this.h + SELECT_MARGIN);
                 this.ctx.fillStyle = COLOR_SQUARE_LIT; //COLOR_SELECT;
 
             } else if (this.highlight) {
@@ -269,8 +271,14 @@ function Game() {
             }
             if (this.selected || this.unlocked) { // not done -------------------------------
                 this.ctx.fillStyle = COLOR_CROSS
-                this.ctx.fillRect(this.rect1x - SELECT_MARGIN / 2, this.rect1y - SELECT_MARGIN / 2, this.thickness + SELECT_MARGIN, this.h + SELECT_MARGIN);
-                this.ctx.fillRect(this.rect2x - SELECT_MARGIN / 2, this.rect2y - SELECT_MARGIN / 2, this.w + SELECT_MARGIN, this.thickness + SELECT_MARGIN);
+                this.ctx.fillRect(this.rect1x - SELECT_MARGIN / 2,
+                    this.rect1y - SELECT_MARGIN / 2,
+                    this.thickness + SELECT_MARGIN,
+                    this.h + SELECT_MARGIN);
+                this.ctx.fillRect(this.rect2x - SELECT_MARGIN / 2,
+                    this.rect2y - SELECT_MARGIN / 2,
+                    this.w + SELECT_MARGIN,
+                    this.thickness + SELECT_MARGIN);
                 this.ctx.fillStyle = COLOR_CROSS_LIT; //COLOR_SELECT;
 
             } else if (this.highlight) {
