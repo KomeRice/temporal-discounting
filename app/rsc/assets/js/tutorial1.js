@@ -1,3 +1,8 @@
+import Triangle from "./shapes/triangle.js"
+import Circle from "./shapes/circle.js";
+import Square from "./shapes/square.js";
+import Cross from "./shapes/cross.js";
+
 //-----------------------------------------------------------------------------------
 //                            GAME PARAMETERS
 //-----------------------------------------------------------------------------------
@@ -36,273 +41,7 @@ const reducer = (accumulator, currentValue) => accumulator + currentValue;
 GameTuto1();
 
 function GameTuto1() {
-
-    //------------------class------------------------------
-    //probablement à transferer dans un autre fichier js quand on saura comment faire
-
-    class Square {
-        constructor(x, y, w, h, selectable, context = ctxFormsBoard) {
-            this.w = w;
-            this.h = h;
-            this.bottom = y + h / 2;
-            this.top = y - h / 2;
-            this.right = x + w / 2;
-            this.left = x - w / 2;
-            this.highlight = false;
-            this.selectable = selectable;
-            this.selected = false;
-            this.ctx = context; //necessary because of different canvas
-            this.unlocked = false;
-            this.vibrate = false;
-            this.vibrateX = 0;
-            this.vibrateAnimationStep = VIBRATION_STEP;
-        }
-
-        draw() {
-            if (this.vibrate) {
-                if (this.vibrateAnimationStep <= 0) {
-                    this.vibrateAnimationStep = VIBRATION_STEP + 1; //cst shoulb be put
-                    this.vibrate = false;
-                    this.vibrateX = 0;
-                } else if (this.vibrateAnimationStep <= VIBRATION_STEP / 4) {
-                    this.vibrateX -= 2;
-                } else if (this.vibrateAnimationStep <= 3 * VIBRATION_STEP / 4) {
-                    this.vibrateX += 2;
-                } else {
-                    this.vibrateX -= 2
-                }
-                this.vibrateAnimationStep--;
-            }
-            if (this.selected || this.unlocked) {
-                this.ctx.fillStyle = COLOR_SQUARE;
-                this.ctx.fillRect(this.left - SELECT_MARGIN / 2, this.top - SELECT_MARGIN / 2, this.w + SELECT_MARGIN, this.h + SELECT_MARGIN);
-                this.ctx.fillStyle = COLOR_SQUARE_LIT; //COLOR_SELECT;
-
-            } else if (this.highlight) {
-                this.ctx.fillStyle = COLOR_SQUARE_LIT;
-            } else {
-                this.ctx.fillStyle = COLOR_SQUARE;
-            }
-            this.ctx.fillRect(this.left + this.vibrateX, this.top, this.w, this.h);
-        }
-
-        contains(x, y) {
-            //method wich return true if (x,y) inside of the square
-            return x > this.left && x < this.right && y > this.top && y < this.bottom;
-        }
-    }
-
-    class Cross {
-        constructor(x, y, w, h, thickness, selectable, context = ctxFormsBoard) {
-            this.w = w;
-            this.h = h;
-            this.bottom = y + h / 2; //
-            this.top = y - h / 2; //      this part was added
-            this.right = x + w / 2; //      for the easy mode
-            this.left = x - w / 2; //
-            this.thickness = thickness
-            this.rect1x = x - thickness / 2;
-            this.rect1y = y - h / 2;
-            this.rect2x = x - w / 2;
-            this.rect2y = y - thickness / 2;
-            this.highlight = false;
-            this.selectable = selectable;
-            this.selected = false;
-            this.ctx = context; //necessary because of different canvas
-            this.unlocked = false;
-            this.vibrate = false;
-            this.vibrateX = 0;
-            this.vibrateAnimationStep = VIBRATION_STEP;
-        }
-
-        draw() {
-            if (this.vibrate) {
-                if (this.vibrateAnimationStep <= 0) {
-                    this.vibrateAnimationStep = VIBRATION_STEP + 1; //cst shoulb be put
-                    this.vibrate = false;
-                    this.vibrateX = 0;
-                } else if (this.vibrateAnimationStep <= VIBRATION_STEP / 4) {
-                    this.vibrateX -= 2;
-                } else if (this.vibrateAnimationStep <= 3 * VIBRATION_STEP / 4) {
-                    this.vibrateX += 2;
-                } else {
-                    this.vibrateX -= 2
-                }
-                this.vibrateAnimationStep--;
-            }
-            if (this.selected || this.unlocked) { // not done -------------------------------
-                this.ctx.fillStyle = COLOR_CROSS
-                this.ctx.fillRect(this.rect1x - SELECT_MARGIN / 2, this.rect1y - SELECT_MARGIN / 2, this.thickness + SELECT_MARGIN, this.h + SELECT_MARGIN);
-                this.ctx.fillRect(this.rect2x - SELECT_MARGIN / 2, this.rect2y - SELECT_MARGIN / 2, this.w + SELECT_MARGIN, this.thickness + SELECT_MARGIN);
-                this.ctx.fillStyle = COLOR_CROSS_LIT; //COLOR_SELECT;
-
-            } else if (this.highlight) {
-                this.ctx.fillStyle = COLOR_CROSS_LIT;
-            } else {
-                this.ctx.fillStyle = COLOR_CROSS;
-            }
-            this.ctx.fillRect(this.rect1x + this.vibrateX, this.rect1y, this.thickness, this.h);
-            this.ctx.fillRect(this.rect2x + this.vibrateX, this.rect2y, this.w, this.thickness);
-        }
-
-        contains(x, y) {
-            if (easyMode) {
-                return x > this.left && x < this.right && y > this.top && y < this.bottom;
-            } else {
-                //method wich return true if (x,y) inside of the cross
-                return x > this.rect1x && x < this.rect1x + this.thickness &&
-                    y > this.rect1y && y < this.rect1y + this.h ||
-                    x > this.rect2x && x < this.rect2x + this.w &&
-                    y > this.rect2y && y < this.rect2y + this.thickness;
-            }
-
-        }
-    }
-
-    class Circle {
-        constructor(x, y, radius, selectable, context = ctxFormsBoard) {
-            this.x = x;
-            this.y = y;
-            this.radius = radius;
-            this.bottom = y + radius; //
-            this.top = y - radius; //      this part was added
-            this.right = x + radius; //      for the easy mode
-            this.left = x - radius; //
-            this.highlight = false;
-            this.selectable = selectable;
-            this.selected = false;
-            this.ctx = context; //necessary because of different canvas
-            this.unlocked = false;
-            this.vibrate = false;
-            this.vibrateX = 0;
-            this.vibrateAnimationStep = VIBRATION_STEP;
-        }
-
-        draw() {
-            if (this.vibrate) {
-                if (this.vibrateAnimationStep <= 0) {
-                    this.vibrateAnimationStep = VIBRATION_STEP + 1; //cst shoulb be put
-                    this.vibrate = false;
-                    this.vibrateX = 0;
-                } else if (this.vibrateAnimationStep <= VIBRATION_STEP / 4) {
-                    this.vibrateX -= 2;
-                } else if (this.vibrateAnimationStep <= 3 * VIBRATION_STEP / 4) {
-                    this.vibrateX += 2;
-                } else {
-                    this.vibrateX -= 2
-                }
-                this.vibrateAnimationStep--;
-            }
-            if (this.selected || this.unlocked) {
-                this.ctx.fillStyle = COLOR_CIRCLE;
-                this.ctx.beginPath();
-                this.ctx.arc(this.x, this.y, this.radius + SELECT_MARGIN / 2, 0, Math.PI * 2);
-                this.ctx.fill();
-                this.ctx.fillStyle = COLOR_CIRCLE_LIT; //COLOR_SELECT;
-            } else if (this.highlight) {
-                this.ctx.fillStyle = COLOR_CIRCLE_LIT;
-            } else {
-                this.ctx.fillStyle = COLOR_CIRCLE;
-            }
-            this.ctx.beginPath();
-            this.ctx.arc(this.x + this.vibrateX, this.y, this.radius, 0, Math.PI * 2);
-            this.ctx.fill();
-        }
-
-        contains(x, y) {
-            if (easyMode) {
-                return x > this.left && x < this.right && y > this.top && y < this.bottom;
-            } else {
-                return Math.abs(x - this.x) < this.radius && Math.abs(this.y - y) < this.radius;
-            }
-        }
-    }
-
-    class Triangle {
-        constructor(x, y, h, selectable, context = ctxFormsBoard) {
-            this.x = x;
-            this.y = y;
-            this.h = h;
-            this.bottom = y + h / 2; //
-            this.top = y - h / 2; //      this part was added
-            this.right = x + h / 2; //      for the easy mode
-            this.left = x - h / 2; //
-            this.highlight = false;
-            this.selectable = selectable;
-            this.selected = false;
-            this.ctx = context; //necessary because of different canvas
-            this.unlocked = false;
-            this.unlocked = false;
-            //coordinates
-            this.t1 = { x: this.x - this.h / 2, y: this.y + this.h / 2 }; //left coin /_
-            this.t2 = { x: this.x, y: this.y - this.h / 2 }; //top coin /\
-            this.t3 = { x: this.x + this.h / 2, y: this.y + this.h / 2 }; //right coin _\
-            //parameters of the segments - a*X+b
-            this.a_t1_t2 = (this.t1.y - this.t2.y) / (this.t1.x - this.t2.x);
-            this.b_t1_t2 = (this.t2.y - this.a_t1_t2 * this.t2.x);
-            this.a_t2_t3 = (this.t2.y - this.t3.y) / (this.t2.x - this.t3.x);
-            this.b_t2_t3 = (this.t3.y - this.a_t2_t3 * this.t3.x);
-            this.vibrate = false;
-            this.vibrateX = 0;
-            this.vibrateAnimationStep = VIBRATION_STEP;
-
-        }
-        slope_t1_t2(x) {
-            return this.a_t1_t2 * x + this.b_t1_t2;
-        }
-        slope_t2_t3(x) {
-            return this.a_t2_t3 * x + this.b_t2_t3;
-        }
-        draw() {
-            if (this.vibrate) {
-                if (this.vibrateAnimationStep <= 0) {
-                    this.vibrateAnimationStep = VIBRATION_STEP + 1; //cst shoulb be put
-                    this.vibrate = false;
-                    this.vibrateX = 0;
-                } else if (this.vibrateAnimationStep <= VIBRATION_STEP / 4) {
-                    this.vibrateX -= 2;
-                } else if (this.vibrateAnimationStep <= 3 * VIBRATION_STEP / 4) {
-                    this.vibrateX += 2;
-                } else {
-                    this.vibrateX -= 2
-                }
-                this.vibrateAnimationStep--;
-            }
-            if (this.selected || this.unlocked) {
-                this.ctx.fillStyle = COLOR_TRIANGLE;
-                this.ctx.beginPath();
-                this.ctx.moveTo(this.t1.x - SELECT_MARGIN, this.t1.y + SELECT_MARGIN / 2);
-                this.ctx.lineTo(this.t2.x, this.t2.y - SELECT_MARGIN);
-                this.ctx.lineTo(this.t3.x + SELECT_MARGIN, this.t3.y + SELECT_MARGIN / 2);
-                this.ctx.fill();
-                this.ctx.fillStyle = COLOR_TRIANGLE_LIT; //COLOR_SELECT;
-
-            } else if (this.highlight) {
-                this.ctx.fillStyle = COLOR_TRIANGLE_LIT;
-            } else {
-                this.ctx.fillStyle = COLOR_TRIANGLE;
-            }
-            this.ctx.beginPath();
-            this.ctx.moveTo(this.t1.x + this.vibrateX, this.t1.y);
-            this.ctx.lineTo(this.t2.x + this.vibrateX, this.t2.y);
-            this.ctx.lineTo(this.t3.x + this.vibrateX, this.t3.y);
-            this.ctx.fill();
-        }
-
-        contains(x, y) {
-            if (easyMode) {
-                return x > this.left && x < this.right && y > this.top && y < this.bottom;
-            } else {
-                return x >= this.t1.x && x < this.t3.x &&
-                    y > this.slope_t1_t2(x) && y > this.slope_t2_t3(x) &&
-                    y <= this.t3.y;
-            }
-        }
-
-    }
-
     class Indexer {
-        //sqare in the timeline canvas showing the current form to select
         constructor(x, y, w, h, ctx = ctxTimeline) {
             this.x = x;
             this.y = y;
@@ -310,7 +49,6 @@ function GameTuto1() {
             this.h = h;
             this.ctx = ctx;
         }
-
         draw() {
             this.ctx.strokeStyle = COLOR_INDEX;
             this.ctx.strokeRect(this.x - this.w / 2, this.y - this.h / 2, this.w, this.h);
@@ -410,16 +148,16 @@ function GameTuto1() {
             }
             switch ("Triangle") {
                 case "Square":
-                    currentForm = new Square(getTimelineGridX(currentIndex), getTimelineGridY(), MIN_SQUARE_SIZE, MIN_SQUARE_SIZE, false, ctxTimeline);
+                    currentForm = new Square(getTimelineGridX(currentIndex),getTimelineGridY(), MIN_SIZE, false, ctxTimeline)
                     break;
                 case "Circle":
-                    currentForm = new Circle(getTimelineGridX(currentIndex), getTimelineGridY(), MIN_CIRCLE_RADIUS, false, ctxTimeline);
+                    currentForm = new Circle(getTimelineGridX(currentIndex),getTimelineGridY(), MIN_SIZE, false, ctxTimeline)
                     break;
                 case "Triangle":
-                    currentForm = new Triangle(getTimelineGridX(currentIndex), getTimelineGridY(), MIN_TRIANGLE_HEIGHT, false, ctxTimeline);
+                    currentForm = new Triangle(getTimelineGridX(currentIndex),getTimelineGridY(), MIN_SIZE, false, ctxTimeline)
                     break;
                 case "Cross":
-                    currentForm = new Cross(getTimelineGridX(currentIndex), getTimelineGridY(), MIN_SQUARE_SIZE, MIN_SQUARE_SIZE, MIN_CROSS_THICKNESS, false, ctxTimeline);
+                    currentForm = new Cross(getTimelineGridX(currentIndex),getTimelineGridY(), MIN_SIZE, false, ctxTimeline)
                     break;
                 default:
                     console.log("Error while selecting forms for the timeline");
@@ -573,20 +311,20 @@ function GameTuto1() {
             for (var j = 0; j < GRID_SIZE; j++) {
                 switch (prepareFormsBoard[i * GRID_SIZE + j]) {
                     case "Square":
-                        formsBoard[i][j] = new Square(getGridX(j), getGridY(i), SQUARE_SIZE, SQUARE_SIZE, selectableForm == "Square");
-                        nbFormToSelect += selectableForm == "Square" ? 1 : 0;
+                        formsBoard[i][j] = new Square(getGridX(j), getGridY(i), CELL, selectableForm === "Square", ctxFormsBoard)
+                        nbFormToSelect += selectableForm === "Square" ? 1 : 0;
                         break;
                     case "Circle":
-                        formsBoard[i][j] = new Circle(getGridX(j), getGridY(i), CIRCLE_RADIUS, selectableForm == "Circle");
-                        nbFormToSelect += selectableForm == "Circle" ? 1 : 0;
+                        formsBoard[i][j] = new Circle(getGridX(j), getGridY(i), CELL, selectableForm === "Circle", ctxFormsBoard)
+                        nbFormToSelect += selectableForm === "Circle" ? 1 : 0;
                         break;
                     case "Cross":
-                        formsBoard[i][j] = new Cross(getGridX(j), getGridY(i), SQUARE_SIZE, SQUARE_SIZE, CROSS_THICKNESS, selectableForm == "Cross");
-                        nbFormToSelect += selectableForm == "Cross" ? 1 : 0;
+                        formsBoard[i][j] = new Cross(getGridX(j), getGridY(i), CELL, selectableForm === "Cross", ctxFormsBoard)
+                        nbFormToSelect += selectableForm === "Cross" ? 1 : 0;
                         break;
                     case "Triangle":
-                        formsBoard[i][j] = new Triangle(getGridX(j), getGridY(i), TRIANGLE_HEIGHT, selectableForm == "Triangle");
-                        nbFormToSelect += selectableForm == "Triangle" ? 1 : 0;
+                        formsBoard[i][j] = new Triangle(getGridX(j), getGridY(i), CELL, selectableForm === "Triangle", ctxFormsBoard)
+                        nbFormToSelect += selectableForm === "Triangle" ? 1 : 0;
                         break;
                     default:
                         console.log("Error while selecting forms for the timeline");
@@ -975,19 +713,19 @@ function GameTuto1() {
         switch (currentTargetName) {
             case "Square":
                 targetSelectable = learningState["Square"] == NB_LOCKS ? true : false;
-                currentTarget = new Square(TC_WIDTH / 2, TC_HEIGHT / 2, TC_SQUARE_SIZE, TC_SQUARE_SIZE, targetSelectable, ctxTarget);
+                currentTarget = new Square(TC_WIDTH / 2, TC_HEIGHT / 2, TC_CELL, targetSelectable, ctxTarget);
                 break;
             case "Circle":
                 targetSelectable = learningState["Circle"] == NB_LOCKS ? true : false;
-                currentTarget = new Circle(TC_WIDTH / 2, TC_HEIGHT / 2, TC_CIRCLE_RADIUS, targetSelectable, ctxTarget);
+                currentTarget = new Circle(TC_WIDTH / 2, TC_HEIGHT / 2, TC_CELL, targetSelectable, ctxTarget);
                 break;
             case "Triangle":
-                targetSelectable = learningState["Triangle"] == NB_LOCKS ? true : false;
-                currentTarget = new Triangle(TC_WIDTH / 2, TC_HEIGHT / 2, TC_TRIANGLE_HEIGHT, targetSelectable, ctxTarget);
+                targetSelectable = learningState["Triangle"] === NB_LOCKS ? true : false;
+                currentTarget = new Triangle(TC_WIDTH / 2, TC_HEIGHT / 2, TC_CELL, targetSelectable, ctxTarget);
                 break;
             case "Cross":
                 targetSelectable = learningState["Cross"] == NB_LOCKS ? true : false;
-                currentTarget = new Cross(TC_WIDTH / 2, TC_HEIGHT / 2, TC_SQUARE_SIZE, TC_SQUARE_SIZE, TC_CROSS_THICKNESS, targetSelectable, ctxTarget);
+                currentTarget = new Cross(TC_WIDTH / 2, TC_HEIGHT / 2, TC_CELL, targetSelectable, ctxTarget);
                 break;
             default:
                 console.log("Error while selecting forms for the target");

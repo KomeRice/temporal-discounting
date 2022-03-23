@@ -75,7 +75,10 @@ function GameTuto3() {
             }
             if (this.selected || this.unlocked) {
                 this.ctx.fillStyle = COLOR_SQUARE;
-                this.ctx.fillRect(this.left - SELECT_MARGIN / 2, this.top - SELECT_MARGIN / 2, this.w + SELECT_MARGIN, this.h + SELECT_MARGIN);
+                this.ctx.fillRect(this.left - SELECT_MARGIN / 2,
+                    this.top - SELECT_MARGIN / 2,
+                    this.w + SELECT_MARGIN,
+                    this.h + SELECT_MARGIN);
                 this.ctx.fillStyle = COLOR_SQUARE_LIT; //COLOR_SELECT;
 
             } else if (this.highlight) {
@@ -155,7 +158,6 @@ function GameTuto3() {
                     x > this.rect2x && x < this.rect2x + this.w &&
                     y > this.rect2y && y < this.rect2y + this.thickness;
             }
-
         }
     }
 
