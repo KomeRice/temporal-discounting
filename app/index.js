@@ -18,7 +18,7 @@ const express = require('./myexpress-init/node_modules/express');
 app.use(express.static(__dirname + '/'));
 
 
-const database = new Datastore('/rsc/data/database.db');
+const database = new Datastore('database.db');
 database.loadDatabase(function(err){
 	if (err){
 		console.log("Database not loaded : ", err);
@@ -107,7 +107,7 @@ app.get('/settings', (request, response) => {
 
 app.post('/settings', (request, response) => {
     console.log('I got a request to update settings');
-
+	console.log(request);
     const data = request.body;
     //change database of the game parameters :
     gameParameters.remove({}, { multi: true }, function(err, numRemoved) {

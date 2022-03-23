@@ -321,7 +321,7 @@ async function updateSettings() {
         displayTimeline: displayTimeline,
         authorizeRetest: authorizeRetest
     });
-
+	console.log(gameSettings.body)
     const response = await fetch('/settings', gameSettings);
     const res = await response.json();
     console.log(res);
