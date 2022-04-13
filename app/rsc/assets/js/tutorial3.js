@@ -75,7 +75,10 @@ function GameTuto3() {
             }
             if (this.selected || this.unlocked) {
                 this.ctx.fillStyle = COLOR_SQUARE;
-                this.ctx.fillRect(this.left - SELECT_MARGIN / 2, this.top - SELECT_MARGIN / 2, this.w + SELECT_MARGIN, this.h + SELECT_MARGIN);
+                this.ctx.fillRect(this.left - SELECT_MARGIN / 2,
+                    this.top - SELECT_MARGIN / 2,
+                    this.w + SELECT_MARGIN,
+                    this.h + SELECT_MARGIN);
                 this.ctx.fillStyle = COLOR_SQUARE_LIT; //COLOR_SELECT;
 
             } else if (this.highlight) {
@@ -155,7 +158,6 @@ function GameTuto3() {
                     x > this.rect2x && x < this.rect2x + this.w &&
                     y > this.rect2y && y < this.rect2y + this.thickness;
             }
-
         }
     }
 
@@ -852,10 +854,10 @@ function GameTuto3() {
         const slider = document.createElement('input');
         slider.id = 'slider';
         slider.type = 'range'
-        slider.style.marginTop = String(TL_HEIGHT + SC_HEIGHT + 2 * TC_TOP_MARGIN + TC_HEIGHT) + "px";
-        slider.style.left = String(WIDTH + STROKE) + "px";
+        slider.style.marginTop = String(UNLOCK_X * 2.9) + "px";
+        slider.style.left = String(UNLOCK_Y * 2.97) + "px";
         slider.style.position = 'absolute';
-        slider.style.width = String(TC_WIDTH - STROKE) + "px";
+        slider.style.width = String((TC_WIDTH - STROKE) * 0.9) + "px";
         slider.onmouseover = function() { this.style.cursor = 'grab' };
         slider.onmousedown = function() {
             this.style.cursor = 'grabbing';

@@ -17,16 +17,21 @@ database.loadDatabase();
 const gameParameters = new Datastore('rsc/data/gameParameters.db');
 gameParameters.loadDatabase();
 const betweenElementIndexMemory = [];
-
 app.get('/api', (request, response) => {
+    console.log(database);
     database.find({}, (err, data) => {
+        console.log('IN DATABASE FIND');
         if (err) {
+            console.log('ERROR IN GET API');
             response.end();
             return;
         }
+        console.log('GET API SUCCESS');
         response.json(data);
     });
+    console.log('OUT OF GET');
 });
+
 
 
 
@@ -122,7 +127,7 @@ app.post('/mail', (request, response) => {
     const mail = request.body;
 
     // send mail with defined transport object
-    //let info = await 
+    //let info = await
     transporter.sendMail({
         from: '"IHM expert" <ihmexpert2020@gmail.com>', // sender address
         to: "gilles.bailly@sorbonne-universite.fr", // list of receivers

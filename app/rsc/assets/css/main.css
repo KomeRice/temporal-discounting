@@ -33,6 +33,7 @@ button {
     font: 1em Ubuntu, sans-serif;
     background-color: white;
     color: black;
+    font-weight: bold;
     border: 2px solid #4CAF50;
 }
 

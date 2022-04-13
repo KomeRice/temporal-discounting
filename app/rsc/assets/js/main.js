@@ -69,7 +69,6 @@ async function setGameParameters() {
             updateIntroMsg(STEP, formsList);
         })
         .catch(err => {
-            console.log("erreur dans la mise en place des parametres");
             console.log(err);
         })
         /*.then(() => {
@@ -212,7 +211,10 @@ function Game() {
             }
             if (this.selected || this.unlocked) {
                 this.ctx.fillStyle = COLOR_SQUARE;
-                this.ctx.fillRect(this.left - SELECT_MARGIN / 2, this.top - SELECT_MARGIN / 2, this.w + SELECT_MARGIN, this.h + SELECT_MARGIN);
+                this.ctx.fillRect(this.left - SELECT_MARGIN / 2,
+                    this.top - SELECT_MARGIN / 2,
+                    this.w + SELECT_MARGIN,
+                    this.h + SELECT_MARGIN);
                 this.ctx.fillStyle = COLOR_SQUARE_LIT; //COLOR_SELECT;
 
             } else if (this.highlight) {
@@ -269,8 +271,14 @@ function Game() {
             }
             if (this.selected || this.unlocked) { // not done -------------------------------
                 this.ctx.fillStyle = COLOR_CROSS
-                this.ctx.fillRect(this.rect1x - SELECT_MARGIN / 2, this.rect1y - SELECT_MARGIN / 2, this.thickness + SELECT_MARGIN, this.h + SELECT_MARGIN);
-                this.ctx.fillRect(this.rect2x - SELECT_MARGIN / 2, this.rect2y - SELECT_MARGIN / 2, this.w + SELECT_MARGIN, this.thickness + SELECT_MARGIN);
+                this.ctx.fillRect(this.rect1x - SELECT_MARGIN / 2,
+                    this.rect1y - SELECT_MARGIN / 2,
+                    this.thickness + SELECT_MARGIN,
+                    this.h + SELECT_MARGIN);
+                this.ctx.fillRect(this.rect2x - SELECT_MARGIN / 2,
+                    this.rect2y - SELECT_MARGIN / 2,
+                    this.w + SELECT_MARGIN,
+                    this.thickness + SELECT_MARGIN);
                 this.ctx.fillStyle = COLOR_CROSS_LIT; //COLOR_SELECT;
 
             } else if (this.highlight) {
@@ -993,10 +1001,10 @@ function Game() {
         const slider = document.createElement('input');
         slider.id = 'slider';
         slider.type = 'range'
-        slider.style.top = String(TL_HEIGHT + SC_HEIGHT + 2 * TC_TOP_MARGIN + TC_HEIGHT) + "px";
-        slider.style.left = String(WIDTH + STROKE) + "px";
+        slider.style.top = String(UNLOCK_X * 2.7) + "px";
+        slider.style.left = String((WIDTH + STROKE) * 1.02) + "px";
         slider.style.position = 'absolute';
-        slider.style.width = String(TC_WIDTH - STROKE) + "px";
+        slider.style.width = String((TC_WIDTH - STROKE) * 0.9) + "px";
         slider.onclick = function() { nbUsefulClick++ };
         slider.onmouseover = function() { this.style.cursor = 'grab' };
         slider.onmousedown = function() {
@@ -1285,7 +1293,8 @@ function Game() {
     //find a better way to choose the position of the nextButton
     nextButton.style.display = '';
     nextButton.style.top = String(TL_HEIGHT + HEIGHT - nextButton.height) + "px;";
-    nextButton.style.margin = String(WIDTH + STROKE) + "px";
+    nextButton.style.marginLeft = String(WIDTH + STROKE) + "px";
+    nextButton.style.marginTop = String(HEIGHT / 1.8) + "px";
     nextButton.disabled = true;
 
     //--------------------    function   -------------------------------------------
