@@ -2,6 +2,9 @@ import Triangle from "./shapes/triangle.js";
 import Circle from "./shapes/circle.js";
 import Square from "./shapes/square.js";
 import Cross from "./shapes/cross.js";
+import Button from "./shapes/button.js";
+import TDGame from "./tdGame.js";
+
 
 //-----------------------------------------------------------------------------------
 //                            GAME PARAMETERS
@@ -97,30 +100,30 @@ function shuffle(array) {
 }
 
 //useful for array sum
-const reducer = (accumulator, currentValue) => accumulator + currentValue;
+const reducer = (accumulator, currentValue) => accumulator + currentValue
 
 //--------------------------------------------------------------------------------
 //                  GAME variables to post in the database
 //--------------------------------------------------------------------------------
-var formNameTimeline = [];
-var listLockState = []; //unlock state link to the formTimeline
-var nbTotalClick = 0;
-var nbUsefulClick = 0;
-var nbLockOpened = 0;
-var listNbClick = [];
-var listNbUnusefulClick = [];
-var listDuration = [];
-var listTryUnlock = [];
-var listTimeToUnlock = [];
-var listNbFormToSelect = [];
-var listNbLockOpened = [];
-var listOccurence = [];
-var listSliderDisplaySpan = [];
-var jsonOccurence = { 'Square': 1, 'Circle': 1, 'Triangle': 1, 'Cross': 1 };
-var firstUnlockOccurence = { 'Square': -1, 'Circle': -1, 'Triangle': -1, 'Cross': -1 };
-var firstUnlockTrial = { 'Square': -1, 'Circle': -1, 'Triangle': -1, 'Cross': -1 };
-var lastUnlockOccurence = { 'Square': -1, 'Circle': -1, 'Triangle': -1, 'Cross': -1 };
-var lastUnlockTrial = { 'Square': -1, 'Circle': -1, 'Triangle': -1, 'Cross': -1 };
+var formNameTimeline = []
+var listLockState = [] //unlock state link to the formTimeline
+var nbTotalClick = 0
+var nbUsefulClick = 0
+var nbLockOpened = 0
+var listNbClick = []
+var listNbUnusefulClick = []
+var listDuration = []
+var listTryUnlock = []
+var listTimeToUnlock = []
+var listNbFormToSelect = []
+var listNbLockOpened = []
+var listOccurence = []
+var listSliderDisplaySpan = []
+var jsonOccurence = { 'Square': 1, 'Circle': 1, 'Triangle': 1, 'Cross': 1 }
+var firstUnlockOccurence = { 'Square': -1, 'Circle': -1, 'Triangle': -1, 'Cross': -1 }
+var firstUnlockTrial = { 'Square': -1, 'Circle': -1, 'Triangle': -1, 'Cross': -1 }
+var lastUnlockOccurence = { 'Square': -1, 'Circle': -1, 'Triangle': -1, 'Cross': -1 }
+var lastUnlockTrial = { 'Square': -1, 'Circle': -1, 'Triangle': -1, 'Cross': -1 }
 
 let infoButton = document.querySelector(".infoButton")
 infoButton.addEventListener('click', Game)
@@ -128,8 +131,7 @@ infoButton.addEventListener('click', Game)
 
 
 function Game() {
-    document.getElementById('explainGame').style.display='none'
-
+    // Options for HTTP requesssts
     const options = {
         method: 'POST',
         headers: {
@@ -138,52 +140,13 @@ function Game() {
         body: {}
     };
 
-    const bodytemp = document.body
-    bodytemp.addEventListener("mousedown", clickCount); //also
+    let tdGame = new TDGame()
 
-    function clickCount( /* mouse event*/ event) {
-        nbTotalClick++;
-    }
+    // Hide experiment prompt
+    document.getElementById('explainGame').style.display='none'
+    document.body.addEventListener("mousedown", tdGame.addClick)
 
-    async function endGamePOSTING() {
-        //timestamp for the total duration
-        const timestamp = Date.now();
-
-        options.body = JSON.stringify({
-            initDate: initDate,
-            ipUser: ipAdress,
-            nbTrials: STEP,
-            lockSettings: NB_LOCKS,
-            sliderTimeBeforeDisappear: TIME_SLIDER,
-            nbFormsByBlock: nbFormsByBlock,
-            formNameTimeline: formNameTimeline,
-            listTryUnlock: listTryUnlock,
-            listLockState: listLockState,
-            listTimeToUnlock: listTimeToUnlock,
-            listSliderDisplaySpan: listSliderDisplaySpan,
-            listNbFormToSelect: listNbFormToSelect,
-            blockFormFrequence: blockFormFrequence,
-            listNbClick: listNbClick,
-            listNbUnusefulClick: listNbUnusefulClick,
-            listNbLockOpened: listNbLockOpened, //new
-            firstUnlockOccurence: firstUnlockOccurence,
-            firstUnlockTrial: firstUnlockTrial,
-            lastUnlockOccurence: lastUnlockOccurence,
-            lastUnlockTrial: lastUnlockTrial,
-            listOccurence: listOccurence,
-            listDuration: listDuration,
-            totalDuration: timestamp - new Date(initDate).getTime(),
-            betweenElementIndex: BETWEEN_ELEMENT_INDEX
-        });
-        const response = await fetch('/api', options);
-        const data = await response.json();
-        console.log(data);
-    }
-    //listNbUsefulClick: listNbUsefulClick,
-
-    //------------------class------------------------------
-    //probablement à transferer dans un autre fichier js quand on saura comment faire
-
+    // TODO: Figure out what this "Indexer" is for
     class Indexer {
         //sqare in the timeline canvas showing the current form to select
         constructor(x, y, w, h, ctx = ctxTimeline) {
@@ -200,48 +163,6 @@ function Game() {
         }
     }
 
-    class Button {
-        constructor(x, y, w, h, radius, context) {
-            this.w = w;
-            this.h = h;
-            this.bottom = y + h / 2;
-            this.top = y - h / 2;
-            this.right = x + w / 2;
-            this.left = x - w / 2;
-            this.radius = radius;
-            this.highlight = false;
-            //this.selectable = selectable;
-            //this.selected = false;
-            this.ctx = context; //necessary because of different canvas
-        }
-
-        draw() {
-            if (this.highlight) {
-                this.ctx.fillStyle = UNLOCK_BUTTON_COLOR_LIT;
-            } else {
-                this.ctx.fillStyle = UNLOCK_BUTTON_COLOR;
-            }
-            this.ctx.beginPath();
-            this.ctx.strokeStyle = UNLOCK_BUTTON_COLOR_STROKE;
-            this.ctx.lineWidth = "4";
-            this.ctx.moveTo(this.left + this.radius, this.top);
-            this.ctx.lineTo(this.right - this.radius, this.top);
-            this.ctx.quadraticCurveTo(this.right, this.top, this.right, this.top + this.radius);
-            this.ctx.lineTo(this.right, this.bottom - this.radius);
-            this.ctx.quadraticCurveTo(this.right, this.bottom, this.right - this.radius, this.bottom);
-            this.ctx.lineTo(this.left + this.radius, this.bottom);
-            this.ctx.quadraticCurveTo(this.left, this.bottom, this.left, this.bottom - this.radius);
-            this.ctx.lineTo(this.left, this.top + this.radius);
-            this.ctx.quadraticCurveTo(this.left, this.top, this.left + this.radius, this.top);
-            this.ctx.fill();
-            this.ctx.stroke();
-        }
-
-        contains(x, y) {
-            //method wich return true if (x,y) inside of the square
-            return x > this.left && x < this.right && y > this.top && y < this.bottom;
-        }
-    }
     //-----------------------------end class-------------------------------------
     //###################################################################################
 
@@ -252,6 +173,7 @@ function Game() {
     //                        set up the timeline canvas
     //----------------------errors----------------------------------------------------------
     //var STEP = 5;
+
     const MIN_SIZE = 20;
     const MIN_CIRCLE_RADIUS = MIN_SIZE / 4; //
     const MIN_SQUARE_SIZE = MIN_SIZE / 2; //      Same ratio
@@ -393,6 +315,7 @@ function Game() {
 
 
     //start a new game with tab of differents forms
+    //TODO: get there in refactor
     var boardInfos = newGame(formTimeline[0].constructor.name);
     var formsBoard = boardInfos.formsBoard;
     var nbFormToSelect = boardInfos.nbFormToSelect;
@@ -551,6 +474,7 @@ function Game() {
         }
     }
 
+    // TODO: Port this
     function gameUpdate() {
         //update TdGame Variable to save :
         listOccurence[currentStep] = jsonOccurence[nameCurrentForm];
