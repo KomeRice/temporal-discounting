@@ -1,27 +1,19 @@
 {
-    "name": "IHMexpert",
-    "version": "1.0.0",
-    "description": "try it : https://ulrych8.github.io/IHMexpert/index.html ------ Notre projet vise à répondre à la question \"Pourquoi ne devenons nous pas des experts ?\".",
-    "main": "index.js",
-    "scripts": {
-        "start": "node index.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/ulrych8/IHMexpert.git"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "express": "^4.17.1",
-        "nedb": "^1.8.0",
-        "dotenv": "^8.2.0",
-        "cors": "^2.8.5",
-        "nodemailer": "^6.4.8"
-    },
-    "bugs": {
-        "url": "https://github.com/ulrych8/IHMexpert/issues"
-    },
-    "homepage": "https://github.com/ulrych8/IHMexpert/index.html"
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nedb": "^1.8.0",
+    "nodemailer": "^6.7.2",
+    "nodemon": "^2.0.15",
+    "winston": "^3.6.0"
+  }
 }

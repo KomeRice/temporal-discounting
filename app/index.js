@@ -1,37 +1,48 @@
-const express = require('express');
+/*
+* This is the main JS file
+* CAUTION : DO NOT EDIT THE EXPRESS SERVER INITIALIZATION !
+*/
+
+//BEGIN EXPRESS SERVER INITIALIZATION
+var init = require('./myexpress-init/server.js');
+app = init();
+//END EXPRESS SERVER INITIALIZATION
+
 const Datastore = require('nedb');
 const nodemailer = require("nodemailer");
-const app = express();
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`listening at ${port}...`));
 
-app.use(express.static('./'));
-app.use(express.json());
 
-const database = new Datastore('rsc/data/database.db');
-database.loadDatabase();
-// database.remove({}, { multi: true }, function(err, numRemoved) {
-//    database.loadDatabase(function(err) {});
-// });
+app.get('/', function(req, res) {
+	res.sendFile(__dirname + '/tutorial.html');
+});
+const express = require('./myexpress-init/node_modules/express')
+app.use(express.static(__dirname + '/'));
+app.use(express.json( /*{limit:'1mb'} */ ));
 
-const gameParameters = new Datastore('rsc/data/gameParameters.db');
-gameParameters.loadDatabase();
+const database = new Datastore({ filename: './rsc/data/database.db', autoload: true });
+
+//database.remove({}, { multi: true }, function(err, numRemoved) {
+//   database.loadDatabase(function(err) {});
+//});
+
+
+const gameParameters = new Datastore({ filename: './rsc/data/gameParameters.db', autoload: true });
 const betweenElementIndexMemory = [];
+
 app.get('/api', (request, response) => {
-    console.log(database);
+	console.log(database);
     database.find({}, (err, data) => {
-        console.log('IN DATABASE FIND');
+		console.log('IN DATABASE FIND');
         if (err) {
-            console.log('ERROR IN GET API');
+			console.log('ERROR IN GET API');
             response.end();
             return;
         }
-        console.log('GET API SUCCESS');
+		console.log('GET API SUCCESS');
         response.json(data);
     });
-    console.log('OUT OF GET');
+	console.log('OUT OF GET');
 });
-
 
 
 
@@ -127,14 +138,14 @@ app.post('/mail', (request, response) => {
     const mail = request.body;
 
     // send mail with defined transport object
-    //let info = await
-    transporter.sendMail({
+    //let info = await 
+/*     transporter.sendMail({
         from: '"IHM expert" <ihmexpert2020@gmail.com>', // sender address
         to: "gilles.bailly@sorbonne-universite.fr", // list of receivers
         subject: "Comment", // Subject line
         //text: "Hello world?", // plain text body
         html: mail.content, // html body
-    });
+    }); */
 
     //console.log("Message sent: %s", info.messageId);
 

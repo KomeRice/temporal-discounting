@@ -1001,7 +1001,7 @@ function Game() {
         const slider = document.createElement('input');
         slider.id = 'slider';
         slider.type = 'range'
-        slider.style.top = String(UNLOCK_X * 2.7) + "px";
+		slider.style.top = String(UNLOCK_X * 2.7) + "px";
         slider.style.left = String((WIDTH + STROKE) * 1.02) + "px";
         slider.style.position = 'absolute';
         slider.style.width = String((TC_WIDTH - STROKE) * 0.9) + "px";
@@ -1034,7 +1034,7 @@ function Game() {
         slider.oninput = (slider = this) => {
             unlockDone = 3;
             //timer part
-            if (Date.now() - startTimeSlider > TIME_SLIDER) {
+            if (Date.now() - startTimeSlider +300 > TIME_SLIDER) {
                 timerComplete = true;
                 unlock();
             }
@@ -1288,7 +1288,7 @@ function Game() {
     //------------------------------------------------------------------------------
     //                              Button
     //------------------------------------------------------------------------------
-
+	
     var nextButton = document.getElementById("nextButton");
     //find a better way to choose the position of the nextButton
     nextButton.style.display = '';
