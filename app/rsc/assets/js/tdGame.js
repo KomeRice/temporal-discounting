@@ -1,9 +1,10 @@
 class TDGame {
     constructor(triWeight, cirWeight, squWeight, croWeight, targetMin, targetMax,
-                timeLearning, nbSliders, nbLocks,
+                timeLearning, nbSliders, nbLocks, gridWidth, gridHeight,
                 shapeNames = ["Triangle", "Circle", "Square", "Cross"],
                 showTimeline = true, easyMode = false) {
         this.totalClicks = 0
+
         this.weights = [triWeight, cirWeight, squWeight, croWeight]
         this.triWeight = triWeight
         this.cirWeight = cirWeight
@@ -13,6 +14,8 @@ class TDGame {
         this.shapeNames = shapeNames
         this.targetMin = targetMin
         this.targetMax = targetMax
+        this.gridWidth = gridWidth
+        this.gridHeight = gridHeight
         this.showTimeline = showTimeline
         this.nbSliders = nbSliders
         this.nbLocks = nbLocks
@@ -20,12 +23,44 @@ class TDGame {
         this.currStep = 0
         this.easyMode = easyMode
 
+        this.currNbTargets = -1
         this.currShape = ""
         this.currShapeGrid = []
+
     }
 
     initFirstStep(){
         this.currShape = this.pickNewShape()
+    }
+
+    generateGrid(){
+        let shapeList = []
+        this.currNbTargets = Math.floor(Math.random() * (this.targetMax - this.targetMin) + this.targetMin)
+        for(let i = 0; i < this.currNbTargets; i++){
+            shapeList.push(this.currShape)
+        }
+
+        let fillerShapes = []
+        for(let i in this.shapeNames){
+            if(i !== this.currShape)
+                fillerShapes.push(i)
+        }
+
+        for(let i = 0; i < this.gridWidth * this.gridHeight - this.currNbTargets; i++){
+            let choice = Math.floor(Math.random() * fillerShapes.length);
+            shapeList.push(fillerShapes[choice])
+        }
+        shapeList = shuffle(shapeList)
+
+        let newGrid = []
+        for(let i = 0; i < this.gridHeight; i++) {
+            newGrid.push([])
+            for(let j = 0; j < this.gridWidth; i++){
+                newGrid[i].push(shapeList.pop())
+            }
+        }
+
+        return newGrid
     }
 
     addClick(){
@@ -89,7 +124,13 @@ class TDGame {
         console.log(data);
     }
 
-
+    static shuffle(a) {
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
 }
 
 export default TDGame
