@@ -1,61 +1,66 @@
+import gameSettings from "./gameSettings.js";
+
 class TDGame {
     constructor(triWeight, cirWeight, squWeight, croWeight, targetMin, targetMax,
                 timeLearning, nbSliders, nbLocks, gridWidth, gridHeight,
                 shapeNames = ["Triangle", "Circle", "Square", "Cross"],
                 showTimeline = true, easyMode = false) {
-        this.totalClicks = 0
+        this.settings = new gameSettings([triWeight, cirWeight, squWeight, croWeight],
+            triWeight, cirWeight, squWeight, croWeight, targetMin, targetMax,
+            timeLearning, nbSliders, nbLocks, gridWidth, gridHeight, shapeNames,
+            showTimeline, easyMode)
 
-        this.weights = [triWeight, cirWeight, squWeight, croWeight]
-        this.triWeight = triWeight
-        this.cirWeight = cirWeight
-        this.squWeight = squWeight
-        this.croWeight = croWeight
-        // While an overload is set up for this parameter, using it is not recommended
-        this.shapeNames = shapeNames
-        this.targetMin = targetMin
-        this.targetMax = targetMax
-        this.gridWidth = gridWidth
-        this.gridHeight = gridHeight
-        this.showTimeline = showTimeline
-        this.nbSliders = nbSliders
-        this.nbLocks = nbLocks
-        this.timeLearning = timeLearning
+        this.totalClicks = 0
         this.currStep = 0
-        this.easyMode = easyMode
 
         this.currNbTargets = -1
         this.currShape = ""
         this.currShapeGrid = []
-
+        this.gridBacklog = []
     }
 
-    initFirstStep(){
-        this.currShape = this.pickNewShape()
+    initNewStep(){
+        if(this.gridBacklog.length === 0){
+            this.gridBacklog = this.generateBlock()
+        }
+        this.currShapeGrid = this.gridBacklog.pop()
     }
 
-    generateGrid(){
+    generateBlock(){
+        let newBlock = []
+        for(let i = 0; i < this.settings.weights.length; i++){
+            for(let j = 0; j < this.settings.weights[i]; j++){
+                newBlock.push(this.generateGrid(this.settings.shapeNames[i]))
+            }
+        }
+        newBlock = shuffle(newBlock)
+        return newBlock
+    }
+
+    generateGrid(shape){
         let shapeList = []
-        this.currNbTargets = Math.floor(Math.random() * (this.targetMax - this.targetMin) + this.targetMin)
+        this.currNbTargets = Math.floor(Math.random() * (this.settings.targetMax -
+            this.settings.targetMin) + this.settings.targetMin)
         for(let i = 0; i < this.currNbTargets; i++){
-            shapeList.push(this.currShape)
+            shapeList.push(shape)
         }
 
         let fillerShapes = []
-        for(let i in this.shapeNames){
-            if(i !== this.currShape)
+        for(let i in this.settings.shapeNames){
+            if(i !== shape)
                 fillerShapes.push(i)
         }
 
-        for(let i = 0; i < this.gridWidth * this.gridHeight - this.currNbTargets; i++){
+        for(let i = 0; i < this.settings.gridWidth * this.settings.gridHeight - this.currNbTargets; i++){
             let choice = Math.floor(Math.random() * fillerShapes.length);
             shapeList.push(fillerShapes[choice])
         }
         shapeList = shuffle(shapeList)
 
         let newGrid = []
-        for(let i = 0; i < this.gridHeight; i++) {
+        for(let i = 0; i < this.settings.gridHeight; i++) {
             newGrid.push([])
-            for(let j = 0; j < this.gridWidth; i++){
+            for(let j = 0; j < this.settings.gridWidth; i++){
                 newGrid[i].push(shapeList.pop())
             }
         }
@@ -68,18 +73,28 @@ class TDGame {
     }
 
     sumWeight(){
-        return this.triWeight + this.cirWeight + this.squWeight + this.croWeight
+        return this.settings.triWeight + this.settings.cirWeight + this.settings.squWeight + this.settings.croWeight
     }
 
     pickNewShape(){
         let rand = Math.floor(Math.random() * this.sumWeight())
         let s = 0
-        for(let i = 0; this.shapeNames.length; i++) {
-            s += this.weights[i]
+        for(let i = 0; this.settings.shapeNames.length; i++) {
+            s += this.settings.weights[i]
             if(rand < s)
-                return this.shapeNames[i]
+                return this.settings.shapeNames[i]
         }
-        return this.shapeNames[this.shapeNames.length - 1]
+        return this.settings.shapeNames[this.settings.shapeNames.length - 1]
+    }
+
+    shapeSelected(row, col){
+        if(this.currShapeGrid[row][col].selectable){
+            this.currShapeGrid[row][col].selected = true
+        }
+        else{
+            this.currShapeGrid[row][col].vibrate = true
+        }
+
     }
 
     async endGamePOST(ipAdress, NB_LOCKS){
