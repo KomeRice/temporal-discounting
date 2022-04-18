@@ -20,7 +20,7 @@ class PlayField {
         this.canvasElement.height = this.height
         this.canvasElement.width = this.width
 
-        this.canvasElement.style.top = top + "px"
+        this.canvasElement.style.top = String(top) + "px"
         this.context = this.canvasElement.getContext("2d")
         this.context.lineWidth = this.stroke
     }
@@ -54,11 +54,15 @@ class PlayField {
         }
     }
 
-    // TODO: Fill this to fit game logic
     selectShape(event) {
-        for (let row of this.gameInst.currShapeGrid) {
-            for (let shape of row) {
-                shape.highlight = false
+        let x = event.offsetX;
+        let y = event.offsetY;
+        for (let row = 0; row < this.gameInst.currShapeGrid.length; row++) {
+            for (let col = 0; col < this.gameInst.currShapeGrid[row].length; col++) {
+                let shape = this.gameInst.currShapeGrid[row][col]
+                if(shape.contains(x, y)){
+                    this.gameInst.shapeSelected(row, col)
+                }
             }
         }
     }
