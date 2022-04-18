@@ -1,4 +1,8 @@
 import gameSettings from "./gameSettings.js";
+import Triangle from "./shapes/triangle.js"
+import Circle from "./shapes/circle.js";
+import Square from "./shapes/square.js";
+import Cross from "./shapes/cross.js";
 
 class TDGame {
     constructor(triWeight, cirWeight, squWeight, croWeight, targetMin, targetMax,
@@ -145,6 +149,21 @@ class TDGame {
             [a[i], a[j]] = [a[j], a[i]];
         }
         return a;
+    }
+
+    static shapeFromName(shapeName, x, y, minSize, selectable, context){
+        switch(shapeName){
+            case "Triangle":
+                return new Triangle(x, y, minSize, selectable, context)
+            case "Circle":
+                return new Circle(x, y, minSize, selectable, context)
+            case "Square":
+                return new Square(x, y, minSize, selectable, context)
+            case "Cross":
+                return new Cross(x, y, minSize, selectable, context)
+            default:
+                console.log('Unknown shape specified: ' + shapeName)
+        }
     }
 }
 
