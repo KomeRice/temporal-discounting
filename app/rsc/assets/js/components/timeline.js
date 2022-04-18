@@ -15,13 +15,13 @@ class Timeline {
         this.timelineElement.height = this.height
         this.timelineElement.width = this.width
         this.context = this.timelineElement.getContext("2d")
-        this.formTimeline = []
+        this.shapeTimeline = []
         this.indexer = indexer
         this.gameInst = tdGame
     }
 
     appendTimeline(shape){
-        this.formTimeline.append(shape)
+        this.shapeTimeline.push(shape)
     }
 
     getDrawX(col) {
@@ -40,7 +40,7 @@ class Timeline {
         this.context.fillStyle = this.fontColor
         this.context.fillText("Step " + (this.gameInst.currStep + 1), textX, textY)
 
-        for(let form of this.formTimeline){
+        for(let form of this.shapeTimeline){
             form.draw()
         }
         this.indexer.draw()
@@ -50,7 +50,6 @@ class Timeline {
         this.context.fillStyle = this.timelineBoardColor
         this.context.fillRect(0, 0, this.width, this.height);
     }
-
 }
 
 export default Timeline
