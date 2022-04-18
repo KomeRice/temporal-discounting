@@ -32,6 +32,10 @@ class Shape{
         }
         this.vibrateAnimationStep--;
     }
+
+    getShapeName(){
+        return "Shape"
+    }
 }
 
 export default Shape

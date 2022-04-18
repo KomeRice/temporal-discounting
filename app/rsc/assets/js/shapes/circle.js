@@ -43,6 +43,10 @@ class Circle extends Shape {
         return Math.abs(x - this.x) < this.radius &&
             Math.abs(this.y - y) < this.radius;
     }
+
+    getShapeName(){
+        return "Circle"
+    }
 }
 
 export default Circle

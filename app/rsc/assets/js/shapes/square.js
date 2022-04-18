@@ -35,6 +35,10 @@ class Square extends Shape{
     contains(x, y) {
         return this.left < x && x < this.right && this.top < y && y < this.bottom;
     }
+
+    getShapeName(){
+        return "Square"
+    }
 }
 
 export default Square

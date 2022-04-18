@@ -66,6 +66,10 @@ class Triangle extends Shape {
             y > this.slope_t2_t3(x) &&
             y <= this.t3.y;
     }
+
+    getShapeName(){
+        return "Triangle"
+    }
 }
 
 export default Triangle
