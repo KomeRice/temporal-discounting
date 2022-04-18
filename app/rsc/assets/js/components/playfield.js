@@ -1,5 +1,5 @@
 class PlayField {
-    constructor(canvasElement, tdGame, framerate, height, width, nbRow, nbCol, cellSize, top) {
+    constructor(canvasElement, framerate, height, width, nbRow, nbCol, cellSize, top) {
         this.framerate = framerate
         this.height = height
         this.width = width
@@ -15,11 +15,12 @@ class PlayField {
         this.colorBorder = "grey"
         this.colorSelect = "white"
 
-        this.gameInst = tdGame
+        this.gameInst = null
         this.canvasElement = canvasElement
         this.canvasElement.height = this.height
         this.canvasElement.width = this.width
 
+        this.grid = []
         this.canvasElement.style.top = String(top) + "px"
         this.context = this.canvasElement.getContext("2d")
         this.context.lineWidth = this.stroke
@@ -33,7 +34,7 @@ class PlayField {
         return this.margin + this.cellSize * row
     }
 
-    shapeHighlighted(event) {
+    highlightShape(event) {
         let x = event.offsetX;
         let y = event.offsetY;
         document.body.style.cursor = "auto";
@@ -60,9 +61,25 @@ class PlayField {
         for (let row = 0; row < this.gameInst.currShapeGrid.length; row++) {
             for (let col = 0; col < this.gameInst.currShapeGrid[row].length; col++) {
                 let shape = this.gameInst.currShapeGrid[row][col]
-                if(shape.contains(x, y)){
-                    this.gameInst.shapeSelected(row, col)
+                if(shape.contains(x, y) && !shape.selected){
+                    this.gameInst.selectShape(x, y)
                 }
+            }
+        }
+    }
+
+    drawBoard(){
+        this.context.fillStyle = this.colorBoard
+        this.context.strokeStyle = this.colorBorder
+        this.context.fillRect(0, 0, this.width, this.height)
+        this.context.strokeRect(this.stroke / 2, this.stroke / 2,
+            this.width - this.stroke, this.height - this.stroke)
+    }
+
+    drawShapes(){
+        for(let row of this.gameInst.currShapeGrid){
+            for(let shape of row){
+                shape.draw()
             }
         }
     }

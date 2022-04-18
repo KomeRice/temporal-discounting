@@ -1,5 +1,5 @@
 class gameSettings{
-    constructor(weights, triWeight, cirWeight, squWeight, croWeight, targetMin, targetMax,
+    constructor(weights, triWeight, cirWeight, squWeight, croWeight, nbTargets,
                 timeLearning, nbSliders, nbLocks, gridWidth, gridHeight,
                 shapeNames = ["Triangle", "Circle", "Square", "Cross"],
                 showTimeline = true, easyMode = false) {
@@ -15,8 +15,7 @@ class gameSettings{
         this.shapeNames = shapeNames
 
         // Number of targets to show on the grid
-        this.targetMin = targetMin
-        this.targetMax = targetMax
+        this.nbTargets = nbTargets
 
         this.gridWidth = gridWidth
         this.gridHeight = gridHeight

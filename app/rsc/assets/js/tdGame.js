@@ -13,60 +13,159 @@ class TDGame {
             triWeight, cirWeight, squWeight, croWeight, targetMin, targetMax,
             timeLearning, nbSliders, nbLocks, gridWidth, gridHeight, shapeNames,
             showTimeline, easyMode)
+        this.playfield = null
+        this.timeline = null
+        this.learningPanel = null
+        this.targetCanvas = null
 
         this.totalClicks = 0
         this.currStep = 0
+        this.currSelected = 0
 
-        this.currNbTargets = -1
         this.currShape = ""
         this.currShapeGrid = []
         this.gridBacklog = []
+        this.shapeBacklog = []
+        this.lockStates = []
+        for(let i = 0; i < shapeNames.length; i++){
+            this.lockStates.push(0)
+        }
+    }
+
+    removeLock(shape){
+        let index = this.settings.shapeNames.indexOf(shape)
+        if(index === -1){
+            console.log("Attempted to access unknown shape in shapeUnlocked: " + shape)
+            return false
+        }
+
+        if(!this.isShapeUnlocked(shape)){
+            this.lockStates[index]--
+        }
+    }
+
+    shapeUnlockOne(shape){
+        let index = this.settings.shapeNames.indexOf(shape)
+        if(index === -1){
+            console.log("Attempted to access unknown shape in shapeUnlockOne: " + shape)
+            return false
+        }
+
+        if(!this.isShapeUnlocked(shape)){
+            this.lockStates[index]++
+        }
+    }
+
+    isShapeUnlocked(shape){
+        let index = this.settings.shapeNames.indexOf(shape)
+        if(index === -1){
+            console.log("Attempted to access unknown shape in shapeUnlocked: " + shape)
+            return false
+        }
+        return this.lockStates[index] === this.settings.nbLocks
+    }
+
+    bindPlayfield(playfield){
+        this.playfield = playfield
+        this.playfield.gameInst = this
+    }
+
+    bindTimeline(timeline){
+        this.timeline = timeline
+        this.timeline.gameInst = this
+    }
+
+    bindLearningPanel(learningPanel){
+        this.learningPanel = learningPanel
+        this.learningPanel.gameInst = this
+    }
+
+    bindTargetCanvas(targetCanvas){
+        this.targetCanvas = targetCanvas
+        this.targetCanvas.gameInst = this
+    }
+
+    bindComponents(playfield, timeline, learningPanel, targetCanvas){
+        this.bindPlayfield(playfield)
+        this.bindTimeline(timeline)
+        this.bindLearningPanel(learningPanel)
+        this.bindTargetCanvas(targetCanvas)
     }
 
     initNewStep(){
-        if(this.gridBacklog.length === 0){
-            this.gridBacklog = this.generateBlock()
+        if(this.playfield === null){
+            console.log("Playfield must be bound before initialising game step")
+            return
         }
-        this.currShapeGrid = this.gridBacklog.pop()
+        if(this.gridBacklog.length === 0){
+            this.generateBlock()
+        }
+        this.currShape = this.shapeBacklog.shift()
+        this.currShapeGrid = this.gridBacklog.shift()
+
+        this.currSelected = 0
     }
 
     generateBlock(){
-        let newBlock = []
+        let newBlockShapes = []
         for(let i = 0; i < this.settings.weights.length; i++){
             for(let j = 0; j < this.settings.weights[i]; j++){
-                newBlock.push(this.generateGrid(this.settings.shapeNames[i]))
+                newBlockShapes.push(this.settings.shapeNames[i])
             }
         }
-        newBlock = shuffle(newBlock)
-        return newBlock
+
+        newBlockShapes = shuffle(newBlockShapes)
+        this.shapeBacklog = newBlockShapes
+
+        for(let shapeName in this.shapeBacklog){
+            this.gridBacklog.push(this.generateGrid(shapeName))
+        }
     }
 
-    generateGrid(shape){
-        let shapeList = []
-        this.currNbTargets = Math.floor(Math.random() * (this.settings.targetMax -
-            this.settings.targetMin) + this.settings.targetMin)
-        for(let i = 0; i < this.currNbTargets; i++){
-            shapeList.push(shape)
+    generateGrid(targetShape){
+        if(this.playfield === null){
+            console.log("Playfield must be bound before generating a grid")
+            return
         }
 
+        // String list containing shape names to place on playfield
+        let shapeList = []
+
+        // Add nbTargets * targetShape to list
+        for(let i = 0; i < this.settings.nbTargets; i++){
+            shapeList.push(targetShape)
+        }
+
+        // Define filler shapes
         let fillerShapes = []
         for(let i in this.settings.shapeNames){
-            if(i !== shape)
+            if(i !== targetShape)
                 fillerShapes.push(i)
         }
 
-        for(let i = 0; i < this.settings.gridWidth * this.settings.gridHeight - this.currNbTargets; i++){
+        // Add filler shapes to shape list
+        for(let i = 0; i < this.settings.gridWidth * this.settings.gridHeight - this.settings.shapeNames; i++){
             let choice = Math.floor(Math.random() * fillerShapes.length);
             shapeList.push(fillerShapes[choice])
         }
+
+        // Shuffle list of shape names
         shapeList = shuffle(shapeList)
 
         let newGrid = []
         for(let i = 0; i < this.settings.gridHeight; i++) {
             newGrid.push([])
-            for(let j = 0; j < this.settings.gridWidth; i++){
-                newGrid[i].push(shapeList.pop())
+            for(let j = 0; j < this.settings.gridWidth; j++){
+                let newShapeName = shapeList.pop()
+                // TODO: Give grid to playfield
+                let newShape = TDGame.shapeFromName(newShapeName, this.playfield.gridX(j), this.playfield.gridY(i),
+                    this.playfield.cellSize, newShapeName === targetShape, this.playfield.context)
+                newGrid[i].push(newShape)
             }
+        }
+
+        if(shapeList.length() !== 0){
+            console.log("generateGrid(): Shape list has an overflow of " + String(shapeList.length()))
         }
 
         return newGrid
@@ -91,17 +190,41 @@ class TDGame {
         return this.settings.shapeNames[this.settings.shapeNames.length - 1]
     }
 
-    shapeSelected(row, col){
-        if(this.currShapeGrid[row][col].selectable){
-            this.currShapeGrid[row][col].selected = true
+    selectShape(row, col){
+        // TODO: Make nextbutton appear
+        if(this.currShapeGrid[row][col].getShapeName() === this.currShape){
+            if(this.isShapeUnlocked(this.currShape)){
+                for(let i = 0; i < this.settings.gridHeight; i++) {
+                    for(let j = 0; j < this.settings.gridWidth; j++){
+                        if(this.currShapeGrid[i][j].getShapeName() === this.currShape){
+                            this.currShapeGrid.selected = true
+                        }
+                    }
+                }
+                this.allSelected()
+            }
+            else{
+                this.currShapeGrid[row][col].selected = true
+                this.currSelected++
+                if(this.currSelected === this.settings.nbTargets){
+                    this.allSelected()
+                }
+            }
         }
         else{
             this.currShapeGrid[row][col].vibrate = true
         }
+    }
+
+    allSelected(){
+        // TODO: all is selected, what do
+        // log stuff
+        // reset
+        this.initNewStep()
 
     }
 
-    async endGamePOST(ipAdress, NB_LOCKS){
+    /* async endGamePOST(ipAdress, NB_LOCKS){
         const options = {
             method: 'POST',
             headers: {
@@ -141,7 +264,7 @@ class TDGame {
         const response = await fetch('/api', options);
         const data = await response.json();
         console.log(data);
-    }
+    }*/
 
     static shuffle(a) {
         for (let i = a.length - 1; i > 0; i--) {
