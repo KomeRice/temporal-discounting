@@ -104,6 +104,7 @@ class TDGame {
         this.currShapeGrid = this.gridBacklog.shift()
 
         this.currSelected = 0
+        this.currStep++
     }
 
     generateBlock(){
