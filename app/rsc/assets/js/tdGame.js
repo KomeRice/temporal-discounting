@@ -65,6 +65,10 @@ class TDGame {
         return this.lockStates[index] === this.settings.nbLocks
     }
 
+    shapeUnlock(){
+
+    }
+
     bindPlayfield(playfield){
         this.playfield = playfield
         this.playfield.gameInst = this
@@ -221,7 +225,7 @@ class TDGame {
         // TODO: all is selected, what do
         // log stuff
         // reset
-        this.initNewStep()
+        this.targetCanvas.unlockButtonClickable = true
 
     }
 
