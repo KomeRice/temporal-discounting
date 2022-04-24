@@ -1,7 +1,7 @@
 import tdGame from "../tdGame";
 
 class Timeline {
-    constructor(timelineElement, size, indexer, step = 8) {
+    constructor(timelineElement, size, step = 8) {
         this.size = size
         this.margin = 20
         this.index_size = (size / 2) + 3
@@ -18,8 +18,9 @@ class Timeline {
         this.timelineElement.width = this.width
         this.context = this.timelineElement.getContext("2d")
         this.shapeTimeline = []
-        this.indexer = indexer
         this.gameInst = null
+
+        this.indexer = new Indexer(this.getDrawX(0), this.getDrawY(), this.indexColor, this.index_size);
     }
 
     appendTimeline(shape){
@@ -44,6 +45,10 @@ class Timeline {
         return this.margin + this.size / 2 + 18; // 18 is the size of the font
     }
 
+    updateIndexer(step) {
+        this.indexer.x = this.getDrawX(step)
+    }
+
     drawStep(){
         // Magic numbers
         let textX = 2
@@ -59,6 +64,23 @@ class Timeline {
     drawBoard(){
         this.context.fillStyle = this.timelineBoardColor
         this.context.fillRect(0, 0, this.width, this.height);
+    }
+}
+
+class Indexer {
+    //sqare in the timeline canvas showing the current form to select
+    constructor(x, y, w, h, ctx, color) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.ctx = ctx;
+        this.color = color
+    }
+
+    draw() {
+        this.ctx.strokeStyle = this.color;
+        this.ctx.strokeRect(this.x - this.w / 2, this.y - this.h / 2, this.w, this.h);
     }
 }
 
