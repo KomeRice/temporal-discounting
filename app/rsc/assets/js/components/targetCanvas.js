@@ -1,4 +1,7 @@
+// noinspection DuplicatedCode
+
 import Button from "../shapes/button";
+import tdGame from "../tdGame";
 
 class TargetCanvas {
     constructor(canvasElement, height, width, topMargin, cellSize,
@@ -12,7 +15,10 @@ class TargetCanvas {
 
         this.top = top
         this.left = left
+        this.stroke = stroke
 
+        this.colorBoard = "gainsboro"
+        this.colorBorder = "grey"
         this.targetColorFont = "red"
         this.targetColorFontUnlocked = "#4CAF50"
         this.unlockButtonColorUnlit = "white";
@@ -44,9 +50,14 @@ class TargetCanvas {
         this.canvasElement.addEventListener("mousedown", this.unlockClick)
 
         this.timerComplete = false
+        this.targetShapeDisplay = this.getTargetShape()
 
         this.slider = null
         this.gameInst = null
+    }
+
+    newStepProcess(){
+        this.targetShapeDisplay = this.getTargetShape()
     }
 
     highlightButton(event){
@@ -78,6 +89,64 @@ class TargetCanvas {
             this.slider = new Slider(this)
             this.displayUnlockButton = false
         }
+    }
+
+    resetSlider(){
+        this.slider.killSlider()
+        this.slider = new Slider(this)
+    }
+
+    processUnlock() {
+        if(this.timerComplete || this.slider.done || !this.unlockButtonClickable)
+            return
+        this.resetSlider()
+        this.timerComplete = false
+
+
+    }
+
+    draw(){
+        this.context.fillStyle = this.colorBoard
+        this.context.strokeStyle = this.colorBorder
+        this.context.fillRect(0, 0, this.width, this.height)
+        this.context.strokeRect(this.stroke / 2, this.stroke / 2,
+            this.width - this.stroke, this.height - this.stroke)
+        this.targetShapeDisplay.draw()
+
+        if(this.unlockButton) {
+            this.unlockButton.draw()
+            return
+        }
+
+        this.context.fillStyle = this.targetColorFont
+        this.context.font = "bold 18px arial"
+        this.context.textAlign = "center"
+
+
+        if(this.gameInst.isShapeUnlocked(this.gameInst.currShape)) {
+            this.context.fillStyle = this.targetColorFontUnlocked
+            this.context.fillText("UNLOCKED", this.width / 2, this.unlockY + 5)
+        }
+        else{
+            this.context.fillText("UNLOCK", this.width / 2, this.unlockY + 5)
+        }
+    }
+
+    getTargetShape(){
+        // TODO: Move unlock button handle out
+        this.unlockButton = null
+
+        if(this.gameInst.isShapeUnlocked(this.gameInst.currShape)) {
+            this.displayUnlockButton = false
+        }
+        else{
+            this.displayUnlockButton = true
+            this.unlockButton = new Button(this.unlockX, this.unlockY,
+                this.unlockWidth, this.unlockHeight, this.unlockRadius, this.context)
+        }
+
+        return tdGame.shapeFromName(this.gameInst.currShape, this.width / 2, this.height / 2,
+            this.cellSize, false, this.context)
     }
 }
 
