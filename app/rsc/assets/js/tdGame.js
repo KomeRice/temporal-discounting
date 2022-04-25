@@ -5,14 +5,8 @@ import Square from "./shapes/square.js";
 import Cross from "./shapes/cross.js";
 
 class TDGame {
-    constructor(triWeight, cirWeight, squWeight, croWeight, targetMin, targetMax,
-                timeLearning, nbSliders, nbLocks, gridWidth, gridHeight,
-                shapeNames = ["Triangle", "Circle", "Square", "Cross"],
-                showTimeline = true, easyMode = false) {
-        this.settings = new gameSettings([triWeight, cirWeight, squWeight, croWeight],
-            triWeight, cirWeight, squWeight, croWeight, targetMin, targetMax,
-            timeLearning, nbSliders, nbLocks, gridWidth, gridHeight, shapeNames,
-            showTimeline, easyMode)
+    constructor(settings) {
+        this.settings = settings
         this.playfield = null
         this.timeline = null
         this.learningPanel = null
