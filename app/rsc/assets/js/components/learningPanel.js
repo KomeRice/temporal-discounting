@@ -57,7 +57,6 @@ class learningPanel{
         return this.canvMargin + this.cellSize * row - this.imgHeight / 2
     }
 
-
     draw(){
         this.context.fillStyle = this.colorBoard
         this.context.strokeStyle = this.colorBorder
