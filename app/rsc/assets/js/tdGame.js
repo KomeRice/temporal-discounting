@@ -44,7 +44,7 @@ class TDGame {
         }
     }
 
-    shapeUnlockOne(shape){
+    shapeUnlockOne(shape = this.currShape){
         let index = this.settings.shapeNames.indexOf(shape)
         if(index === -1){
             console.log("Attempted to access unknown shape in shapeUnlockOne: " + shape)
@@ -104,8 +104,11 @@ class TDGame {
         if(this.gridBacklog.length === 0){
             this.generateBlock()
         }
+
         this.currShape = this.shapeBacklog.shift()
         this.currShapeGrid = this.gridBacklog.shift()
+
+        this.targetCanvas.newStepProcess()
 
         this.currSelected = 0
         this.currStep++
@@ -228,48 +231,6 @@ class TDGame {
         this.targetCanvas.unlockButtonClickable = true
 
     }
-
-    /* async endGamePOST(ipAdress, NB_LOCKS){
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: {}
-        }
-
-        const timestamp = Date.now();
-
-        options.body = JSON.stringify({
-            initDate: initDate,
-            ipUser: ipAdress,
-            nbTrials: STEP,
-            lockSettings: NB_LOCKS,
-            sliderTimeBeforeDisappear: TIME_SLIDER,
-            nbFormsByBlock: nbFormsByBlock,
-            formNameTimeline: formNameTimeline,
-            listTryUnlock: listTryUnlock,
-            listLockState: listLockState,
-            listTimeToUnlock: listTimeToUnlock,
-            listSliderDisplaySpan: listSliderDisplaySpan,
-            listNbFormToSelect: listNbFormToSelect,
-            blockFormFrequence: blockFormFrequence,
-            listNbClick: listNbClick,
-            listNbUnusefulClick: listNbUnusefulClick,
-            listNbLockOpened: listNbLockOpened, //new
-            firstUnlockOccurence: firstUnlockOccurence,
-            firstUnlockTrial: firstUnlockTrial,
-            lastUnlockOccurence: lastUnlockOccurence,
-            lastUnlockTrial: lastUnlockTrial,
-            listOccurence: listOccurence,
-            listDuration: listDuration,
-            totalDuration: timestamp - new Date(initDate).getTime(),
-            betweenElementIndex: BETWEEN_ELEMENT_INDEX
-        });
-        const response = await fetch('/api', options);
-        const data = await response.json();
-        console.log(data);
-    }*/
 
     static shuffle(a) {
         for (let i = a.length - 1; i > 0; i--) {
