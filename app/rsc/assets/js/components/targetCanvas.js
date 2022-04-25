@@ -233,3 +233,5 @@ class Slider {
         }
     }
 }
+
+export default TargetCanvas

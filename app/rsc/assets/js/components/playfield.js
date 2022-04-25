@@ -87,3 +87,5 @@ class PlayField {
         }
     }
 }
+
+export default PlayField

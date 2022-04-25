@@ -1,6 +1,6 @@
 import tdGame from "../tdGame";
 
-class learningPanel{
+class LearningPanel{
     constructor(canvasElement, cellSize, maxLockCount, shapeNames, top, left, stroke) {
         this.cellSize = cellSize
         this.imgWidth = 4 * cellSize / 12
@@ -81,3 +81,5 @@ class learningPanel{
         }
     }
 }
+
+export default LearningPanel
