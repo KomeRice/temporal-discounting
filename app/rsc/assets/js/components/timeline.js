@@ -65,6 +65,10 @@ class Timeline {
         this.context.fillStyle = this.timelineBoardColor
         this.context.fillRect(0, 0, this.width, this.height);
     }
+
+    draw() {
+        this.drawStep()
+    }
 }
 
 class Indexer {

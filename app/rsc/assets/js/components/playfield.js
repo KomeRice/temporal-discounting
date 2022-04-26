@@ -71,6 +71,11 @@ class PlayField {
         }
     }
 
+    draw() {
+        this.drawBoard()
+        this.drawShapes()
+    }
+
     drawBoard(){
         this.context.fillStyle = this.colorBoard
         this.context.strokeStyle = this.colorBorder

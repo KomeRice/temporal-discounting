@@ -45,7 +45,6 @@ class TargetCanvas {
         this.unlockButton = new Button(this.unlockX, this.unlockY,
             this.unlockWidth, this.unlockHeight, this.unlockRadius, this.context)
 
-
         this.canvasElement.addEventListener("mousemove", this.highlightButton)
         this.canvasElement.addEventListener("mousedown", this.unlockClick)
 
@@ -101,8 +100,6 @@ class TargetCanvas {
             return
         this.resetSlider()
         this.timerComplete = false
-
-
     }
 
     draw(){

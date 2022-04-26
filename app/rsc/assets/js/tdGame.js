@@ -99,6 +99,7 @@ class TDGame {
             this.generateBlock()
         }
 
+        this.timeline.refreshTimeline()
         this.currShape = this.shapeBacklog.shift()
         this.currShapeGrid = this.gridBacklog.shift()
 
@@ -142,8 +143,8 @@ class TDGame {
         // Define filler shapes
         let fillerShapes = []
         for(let i in this.settings.shapeNames){
-            if(i !== targetShape)
-                fillerShapes.push(i)
+            if(this.settings.shapeNames[i] !== targetShape)
+                fillerShapes.push(this.settings.shapeNames[i])
         }
 
         // Add filler shapes to shape list
@@ -224,7 +225,6 @@ class TDGame {
         // log stuff
         // reset
         this.targetCanvas.unlockButtonClickable = true
-
     }
 
     static shuffle(a) {
