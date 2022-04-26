@@ -25,8 +25,8 @@ class PlayField {
         this.context = this.canvasElement.getContext("2d")
         this.context.lineWidth = this.stroke
 
-        this.canvasElement.addEventListener("mousmove", this.highlightShape)
-        this.canvasElement.addEventListener("mousedown", this.selectShape)
+        this.canvasElement.addEventListener("mousemove", (event) => this.highlightShape(event))
+        this.canvasElement.addEventListener("mousedown", (event) => this.selectShape(event))
     }
 
     gridX(col) {
