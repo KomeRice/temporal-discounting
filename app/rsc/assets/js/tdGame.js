@@ -146,7 +146,7 @@ class TDGame {
         }
 
         // Add filler shapes to shape list
-        for(let i = 0; i < this.settings.gridWidth * this.settings.gridHeight - this.settings.shapeNames; i++){
+        for(let i = 0; i < this.settings.gridWidth * this.settings.gridHeight - this.settings.nbTargets; i++){
             let choice = Math.floor(Math.random() * fillerShapes.length);
             shapeList.push(fillerShapes[choice])
         }
