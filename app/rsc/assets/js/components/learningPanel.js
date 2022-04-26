@@ -65,7 +65,7 @@ class LearningPanel{
             this.width - this.stroke, this.height - this.stroke)
 
         for(let shape in this.shapeDisplay){
-            shape.draw()
+            this.shapeDisplay[shape].draw()
         }
 
         for(let i = 0; i < this.gameInst.settings.shapeNames.length; i++){

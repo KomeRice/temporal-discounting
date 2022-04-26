@@ -112,7 +112,8 @@ class TDGame {
         let newBlockShapes = []
         for(let i = 0; i < this.settings.weights.length; i++){
             for(let j = 0; j < this.settings.weights[i]; j++){
-                newBlockShapes.push(this.settings.shapeNames[i])
+                let newShape = this.settings.shapeNames[i]
+                newBlockShapes.push(newShape)
             }
         }
 
@@ -120,7 +121,7 @@ class TDGame {
         this.shapeBacklog = newBlockShapes
 
         for(let shapeName in this.shapeBacklog){
-            this.gridBacklog.push(this.generateGrid(shapeName))
+            this.gridBacklog.push(this.generateGrid(this.shapeBacklog[shapeName]))
         }
     }
 
