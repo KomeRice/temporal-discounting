@@ -1,4 +1,4 @@
-import tdGame from "../tdGame";
+import tdGame from "../tdGame.js";
 
 class LearningPanel{
     constructor(canvasElement, cellSize, maxLockCount, shapeNames, top, left, stroke) {

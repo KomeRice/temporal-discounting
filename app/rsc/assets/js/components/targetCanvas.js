@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
-import Button from "../shapes/button";
-import tdGame from "../tdGame";
+import Button from "../shapes/button.js";
+import tdGame from "../tdGame.js";
 
 class TargetCanvas {
     constructor(canvasElement, height, width, topMargin, cellSize,

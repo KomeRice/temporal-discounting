@@ -1,4 +1,4 @@
-import tdGame from "../tdGame";
+import tdGame from "../tdGame.js";
 
 class Timeline {
     constructor(timelineElement, size, step = 8) {
