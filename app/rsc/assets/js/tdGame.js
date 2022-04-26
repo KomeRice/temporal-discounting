@@ -166,8 +166,8 @@ class TDGame {
             }
         }
 
-        if(shapeList.length() !== 0){
-            console.log("generateGrid(): Shape list has an overflow of " + String(shapeList.length()))
+        if(shapeList.length !== 0){
+            console.log("generateGrid(): Shape list has an overflow of " + String(shapeList.length))
         }
 
         return newGrid

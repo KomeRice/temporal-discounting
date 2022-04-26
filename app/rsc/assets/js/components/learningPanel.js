@@ -35,7 +35,7 @@ class LearningPanel{
         this.imgUnlock = new Image()
         this.imgUnlock.src = 'rsc/img/unlock.png'
 
-        for(let i = 0; i < shapeNames.length(); i++){
+        for(let i = 0; i < shapeNames.length; i++){
             this.shapeDisplay.push(tdGame.shapeFromName(shapeNames[i],
                 this.getDrawX(), this.getDrawY(i), this.cellSize, false, this.context))
         }
