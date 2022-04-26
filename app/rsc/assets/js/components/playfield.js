@@ -1,5 +1,5 @@
 class PlayField {
-    constructor(canvasElement, framerate, height, width, nbRow, nbCol, cellSize, top) {
+    constructor(canvasElement, framerate, height, width, nbRow, nbCol, cellSize, top, stroke) {
         this.framerate = framerate
         this.height = height
         this.width = width
@@ -7,7 +7,7 @@ class PlayField {
         this.nbCol = nbCol
         this.cellSize = cellSize
 
-        this.stroke = cellSize / 12
+        this.stroke = stroke
         this.margin = 3 / 2 * cellSize
         this.selectMargin = cellSize / 8
 
