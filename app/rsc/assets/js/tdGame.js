@@ -21,7 +21,7 @@ class TDGame {
         this.gridBacklog = []
         this.shapeBacklog = []
         this.lockStates = []
-        for(let i = 0; i < shapeNames.length; i++){
+        for(let i = 0; i < this.settings.shapeNames.length; i++){
             this.lockStates.push(0)
         }
     }
