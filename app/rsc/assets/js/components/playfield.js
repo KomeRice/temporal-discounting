@@ -65,7 +65,7 @@ class PlayField {
             for (let col = 0; col < this.gameInst.currShapeGrid[row].length; col++) {
                 let shape = this.gameInst.currShapeGrid[row][col]
                 if(shape.contains(x, y) && !shape.selected){
-                    this.gameInst.selectShape(x, y)
+                    this.gameInst.selectShape(row, col)
                 }
             }
         }
