@@ -61,7 +61,7 @@ class LearningPanel{
         this.context.fillStyle = this.colorBoard
         this.context.strokeStyle = this.colorBorder
         this.context.fillRect(0, 0, this.width, this.height)
-        this.context.strokeStyle(this.stroke / 2, this.stroke / 2,
+        this.context.strokeRect(this.stroke / 2, this.stroke / 2,
             this.width - this.stroke, this.height - this.stroke)
 
         for(let shape in this.shapeDisplay){
