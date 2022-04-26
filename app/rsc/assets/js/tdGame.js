@@ -116,7 +116,7 @@ class TDGame {
             }
         }
 
-        newBlockShapes = shuffle(newBlockShapes)
+        newBlockShapes = TDGame.shuffle(newBlockShapes)
         this.shapeBacklog = newBlockShapes
 
         for(let shapeName in this.shapeBacklog){
@@ -152,7 +152,7 @@ class TDGame {
         }
 
         // Shuffle list of shape names
-        shapeList = shuffle(shapeList)
+        shapeList = TDGame.shuffle(shapeList)
 
         let newGrid = []
         for(let i = 0; i < this.settings.gridHeight; i++) {
