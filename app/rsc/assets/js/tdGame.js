@@ -214,7 +214,7 @@ class TDGame {
             }
         }
         else{
-            this.currShapeGrid[row][col].vibrate = true
+            this.currShapeGrid[row][col].doVibrate = true
         }
     }
 
