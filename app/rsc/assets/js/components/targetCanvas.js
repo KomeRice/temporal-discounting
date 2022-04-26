@@ -50,7 +50,7 @@ class TargetCanvas {
         this.canvasElement.addEventListener("mousedown", this.unlockClick)
 
         this.timerComplete = false
-        this.targetShapeDisplay = this.getTargetShape()
+        this.targetShapeDisplay = null
 
         this.slider = null
         this.gameInst = null
