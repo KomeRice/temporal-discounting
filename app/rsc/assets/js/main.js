@@ -24,7 +24,7 @@ function updateIntroMsg(nTask, formsList) {
 let infoButton = document.querySelector(".infoButton")
 infoButton.addEventListener('click', Game)
 
-function Game() {
+async function Game() {
     let framerate = 30
     let cellSize = 80
     let stroke = 1.6
@@ -33,28 +33,37 @@ function Game() {
     // Hide experiment prompt
     document.getElementById('explainGame').style.display='none'
 
-    let settings = gameSettings.loadFromJson("testSettings/testSettings.json")
+    let path = "testSettings/testSettings.json"
 
-    let tdGame = new TDGame(settings)
-    let playField = new PlayField(document.getElementById("formsBoardCanvas"),
-        framerate, 510, 495, settings.gridWidth, settings.gridHeight,
-        cellSize, playfieldtop, stroke)
-    let learningPanel = new LearningPanel(document.getElementById("learningCanvas"),
-        cellSize, settings.nbLocks, settings.shapeNames, 200, 670, stroke)
-    let timeline = new Timeline(document.getElementById("timelineCanvas"), 20)
-    let targetCanvas = new TargetCanvas(document.getElementById("targetCanvas"),
-        160, 160, 50, cellSize, 33, 2/3 * 160,
-        10, 160/2, 130, 60, 500, stroke)
-    tdGame.bindComponents(playField, timeline, learningPanel, targetCanvas)
+    fetch(path).then(response => response.json()).then(json => {
+        let settings = new gameSettings(
+            [], json.triWeight, json.cirWeight, json.squWeight,
+            json.croWeight, json.nbTargets,
+            json.timeLearning, json.nbSliders,
+            json.nbLocks, json.gridWidth, json.gridHeight,
+            json.shapeNames, json.showTimeline, json.easyMode)
 
-    tdGame.initNewStep()
+        let tdGame = new TDGame(settings)
+        let playField = new PlayField(document.getElementById("formsBoardCanvas"),
+            framerate, 510, 495, settings.gridWidth, settings.gridHeight,
+            cellSize, playfieldtop, stroke)
+        let learningPanel = new LearningPanel(document.getElementById("learningCanvas"),
+            cellSize, settings.nbLocks, settings.shapeNames, playfieldtop, 670, stroke)
+        let timeline = new Timeline(document.getElementById("timelineCanvas"), 20)
+        let targetCanvas = new TargetCanvas(document.getElementById("targetCanvas"),
+            160, 160, 50, cellSize, 33, 2/3 * 160,
+            10, 160/2, 130, 60, 500, stroke)
+        tdGame.bindComponents(playField, timeline, learningPanel, targetCanvas)
 
+        tdGame.initNewStep()
 
-    function tick(){
-        tdGame.playfield.draw()
-        tdGame.timeline.draw()
-        tdGame.targetCanvas.draw()
-        tdGame.learningPanel.draw()
-    }
-    setInterval(tick, 1000 / framerate);
+        function tick() {
+            tdGame.playfield.draw()
+            tdGame.timeline.draw()
+            tdGame.targetCanvas.draw()
+            tdGame.learningPanel.draw()
+        }
+
+        setInterval(tick, 1000 / framerate)
+    })
 }
