@@ -65,8 +65,10 @@ class TargetCanvas {
             this.unlockButton = new Button(this.unlockX, this.unlockY,
                 this.unlockWidth, this.unlockHeight, this.unlockRadius, this.context)
         }
-        if(this.slider)
+        if(this.slider) {
             this.slider.killSlider()
+            this.slider = null
+        }
         this.targetShapeDisplay = this.getTargetShape()
         this.unlockUsed = false
 
@@ -156,8 +158,10 @@ class TargetCanvas {
     }
 
     gameEndHandle() {
-        if(this.slider)
+        if(this.slider) {
             this.slider.killSlider()
+            this.slider = null
+        }
     }
 }
 
