@@ -1,7 +1,7 @@
 import tdGame from "../tdGame.js";
 
 class Timeline {
-    constructor(timelineElement, size, left, step = 8) {
+    constructor(timelineElement, size, left, step = 8, maxShapes = 8) {
         this.size = size
         this.margin = 20
         this.index_size = (size / 2) + 3
@@ -20,6 +20,7 @@ class Timeline {
         this.context = this.timelineElement.getContext("2d")
         this.shapeTimeline = []
         this.gameInst = null
+        this.maxShapes = maxShapes
 
         this.indexer = new Indexer(this.getDrawX(0), this.getDrawY(),
             this.index_size, this.index_size, this.context, this.indexColor);
@@ -57,9 +58,18 @@ class Timeline {
         let textY = 30
         this.context.fillStyle = this.fontColor
         this.context.font = this.font
-        this.context.fillText("Step " + (this.gameInst.currStep), textX, textY)
+        let stepString = "Step " + this.gameInst.getCurrStep()
+        if(this.gameInst.settings.maxStep !== -1)
+            stepString += " / " + this.gameInst.settings.maxStep
+        let timerString = " Time left: " + (this.gameInst.getMaxTime() - this.gameInst.getCurrTime()) + "ms"
+        this.context.fillText(stepString + timerString , textX, textY)
+
+        let i = 0
         for(let shape of this.shapeTimeline){
+            if(i >= this.maxShapes)
+                break
             shape.draw()
+            i++
         }
         this.indexer.draw()
     }
