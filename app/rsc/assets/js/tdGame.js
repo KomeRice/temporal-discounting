@@ -12,7 +12,7 @@ class TDGame {
         this.targetCanvas = null
         this.nextButton = false
 
-        this.sliderDuration = this.settings.timeLearning
+        this.sliderDuration = this.settings.timeLearning / this.settings.nbLocks - this.settings.noviceTime
         this.totalClicks = 0
         this.currStep = 0
         this.currSelected = 0
@@ -26,6 +26,7 @@ class TDGame {
             this.lockStates.push(0)
         }
 
+        this.gameEnded = false
         this.startTime = Date.now()
     }
 
@@ -36,6 +37,22 @@ class TDGame {
         }
     }
 
+    getCurrTime() {
+        if(this.gameEnded)
+            return this.settings.maxTimer
+        return Date.now() - this.startTime
+    }
+
+    getCurrStep(){
+        if(this.currStep > this.settings.maxStep && this.settings.maxStep !== -1)
+            return this.settings.maxStep
+        return this.currStep
+    }
+
+    getMaxTime() {
+        return this.settings.maxTimer
+    }
+
     nextStep() {
         if(this.currStep > this.settings.maxStep - 1 && this.settings.maxStep !== -1)
             this.endGame()
@@ -44,6 +61,7 @@ class TDGame {
     }
 
     endGame() {
+        this.gameEnded = true
         document.getElementById("endGame").style.display = "flex"
     }
 
@@ -115,7 +133,8 @@ class TDGame {
             return
         }
 
-        if(this.gridBacklog.length === 0){
+        if(this.gridBacklog.length < this.sumWeight()){
+            this.generateBlock()
             this.generateBlock()
         }
 
@@ -139,9 +158,9 @@ class TDGame {
         }
 
         newBlockShapes = TDGame.shuffle(newBlockShapes)
-        this.shapeBacklog = newBlockShapes
+        this.shapeBacklog = this.shapeBacklog.concat(newBlockShapes)
 
-        for(let shapeName in this.shapeBacklog){
+        for(let shapeName in newBlockShapes){
             this.gridBacklog.push(this.generateGrid(this.shapeBacklog[shapeName]))
         }
     }
