@@ -53,7 +53,15 @@ async function Game() {
         let targetCanvas = new TargetCanvas(document.getElementById("targetCanvas"),
             160, 160, 50, cellSize, 33, 2/3 * 160,
             10, 160/2, 130, 60, 500, stroke)
-        tdGame.bindComponents(playField, timeline, learningPanel, targetCanvas)
+
+        let nextButton = document.getElementById("nextButton")
+        nextButton.style.display = ''
+        nextButton.style.top = String(500) + "px;"
+        nextButton.style.marginLeft = String(500 + stroke) + "px"
+        nextButton.style.marginTop = String(280) + "px"
+        nextButton.disabled = true
+
+        tdGame.bindComponents(playField, timeline, learningPanel, targetCanvas, nextButton)
 
         tdGame.initNewStep()
 

@@ -11,6 +11,7 @@ class TDGame {
         this.timeline = null
         this.learningPanel = null
         this.targetCanvas = null
+        this.nextButton = false
 
         this.totalClicks = 0
         this.currStep = 0
@@ -83,11 +84,13 @@ class TDGame {
         this.targetCanvas.gameInst = this
     }
 
-    bindComponents(playfield, timeline, learningPanel, targetCanvas){
+    bindComponents(playfield, timeline, learningPanel, targetCanvas, nextButton){
         this.bindPlayfield(playfield)
         this.bindTimeline(timeline)
         this.bindLearningPanel(learningPanel)
         this.bindTargetCanvas(targetCanvas)
+        this.nextButton = nextButton
+        this.nextButton.addEventListener('click', () => this.nextStep())
     }
 
     initNewStep(){
@@ -221,10 +224,13 @@ class TDGame {
     }
 
     allSelected(){
-        // TODO: all is selected, what do
-        // log stuff
-        // reset
         this.targetCanvas.unlockButtonClickable = true
+        this.nextButton.disabled = false
+    }
+
+    nextStep() {
+        this.nextButton.disabled = true
+        this.initNewStep()
     }
 
     static shuffle(a) {
