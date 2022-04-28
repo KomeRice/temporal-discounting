@@ -45,10 +45,9 @@ class TargetCanvas {
         this.unlockButton = new Button(this.unlockX, this.unlockY,
             this.unlockWidth, this.unlockHeight, this.unlockRadius, this.context)
 
-        this.canvasElement.addEventListener("mousemove", this.highlightButton)
-        this.canvasElement.addEventListener("mousedown", this.unlockClick)
+        this.canvasElement.addEventListener("mousemove", (event) => this.highlightButton(event))
+        this.canvasElement.addEventListener("mousedown", (event) => this.unlockClick(event))
 
-        this.timerComplete = false
         this.targetShapeDisplay = null
 
         this.slider = null
@@ -56,7 +55,19 @@ class TargetCanvas {
     }
 
     newStepProcess(){
+        if(this.gameInst.isShapeUnlocked(this.gameInst.currShape)) {
+            this.displayUnlockButton = false
+            this.unlockButton = null
+        }
+        else{
+            this.displayUnlockButton = true
+            this.unlockButton = new Button(this.unlockX, this.unlockY,
+                this.unlockWidth, this.unlockHeight, this.unlockRadius, this.context)
+        }
+        if(this.slider)
+            this.slider.killSlider()
         this.targetShapeDisplay = this.getTargetShape()
+
     }
 
     highlightButton(event){
@@ -76,30 +87,30 @@ class TargetCanvas {
                 document.body.style.cursor = "not-allowed"
             }
         }
+        else{
+            document.body.style.cursor = "auto"
+        }
     }
 
     unlockClick(event){
-        if(!this.displayUnlockButton)
+        if(!this.unlockButtonClickable)
             return
         let x = event.offsetX
         let y = event.offsetY
 
         if(this.unlockButton.contains(x, y)){
-            this.slider = new Slider(this)
+            this.slider = new Slider(this, this.top + this.topMargin * 0.75 + this.unlockButton.top
+                , this.left + this.unlockRadius, this.width * 0.9,
+                this.targetShapeDisplay.colorUnlit, this.gameInst.sliderDuration)
             this.displayUnlockButton = false
+            document.body.style.cursor = "auto";
         }
     }
 
-    resetSlider(){
-        this.slider.killSlider()
-        this.slider = new Slider(this)
-    }
-
     processUnlock() {
-        if(this.timerComplete || this.slider.done || !this.unlockButtonClickable)
-            return
-        this.resetSlider()
-        this.timerComplete = false
+        this.slider.killSlider()
+        this.slider = null
+        this.gameInst.shapeUnlockOne()
     }
 
     draw(){
@@ -110,17 +121,17 @@ class TargetCanvas {
             this.width - this.stroke, this.height - this.stroke)
         this.targetShapeDisplay.draw()
 
-        if(this.unlockButton) {
+        if(this.displayUnlockButton) {
             this.unlockButton.draw()
-            return
         }
+
 
         this.context.fillStyle = this.targetColorFont
         this.context.font = "bold 18px arial"
         this.context.textAlign = "center"
 
 
-        if(this.gameInst.isShapeUnlocked(this.gameInst.currShape)) {
+        if(this.gameInst.isShapeUnlocked()) {
             this.context.fillStyle = this.targetColorFontUnlocked
             this.context.fillText("UNLOCKED", this.width / 2, this.unlockY + 5)
         }
@@ -130,44 +141,36 @@ class TargetCanvas {
     }
 
     getTargetShape(){
-        // TODO: Move unlock button handle out
-        this.unlockButton = null
-
-        if(this.gameInst.isShapeUnlocked(this.gameInst.currShape)) {
-            this.displayUnlockButton = false
-        }
-        else{
-            this.displayUnlockButton = true
-            this.unlockButton = new Button(this.unlockX, this.unlockY,
-                this.unlockWidth, this.unlockHeight, this.unlockRadius, this.context)
-        }
-
         return tdGame.shapeFromName(this.gameInst.currShape, this.width / 2, this.height / 2,
             this.cellSize, false, this.context)
     }
 }
 
 class Slider {
-    constructor(parent, top, left, width, slideDuration = 1000) {
+    constructor(parent, top, left, width, color = "darkorange", sliderDuration = 1000, slideThreshold = 4) {
         this.parent = parent
 
         this.display = false
         this.startTime = null
-        this.slideDuration = slideDuration
+        this.sliderDuration = sliderDuration
 
         this.done = false
         this.canvasElement = document.createElement('input')
         this.canvasElement.id = 'slider'
         this.canvasElement.type = 'range'
-        this.canvasElement.style.top = top
-        this.canvasElement.style.left = left
+        this.canvasElement.style.top = String(top) + "px"
+        this.canvasElement.style.left = String(left) + "px"
         this.canvasElement.style.position = 'absolute'
-        this.canvasElement.style.width = width
-        this.canvasElement.onmouseover = this.setCursorStyleGrab
-        this.canvasElement.onmousedown = this.mouseDown
-        this.canvasElement.onmouseup = this.setCursorStyleGrab
-        this.canvasElement.style.background = "darkorange"
-        this.canvasElement.oninput = this.onInput
+        this.canvasElement.style.width = String(width) + "px"
+
+
+        this.canvasElement.addEventListener("mousemove", (event) => this.setCursorStyleGrab(event))
+        this.canvasElement.addEventListener("mouseup", (event) => this.setCursorStyleGrab(event))
+        this.canvasElement.addEventListener("mousedown", (event) => this.mouseDown(event))
+        this.canvasElement.addEventListener("mousedown", (event) => this.mouseDown(event))
+        this.canvasElement.addEventListener("input", (event) => this.onInput(event))
+
+        this.canvasElement.style.background = color
 
         this.sliderDirection = 'right'
 
@@ -175,14 +178,17 @@ class Slider {
 
         this.oldValue = 0
         this.nbSlide = 0
+        this.slideThreshold = slideThreshold
+        this.sliderAccept = false
     }
 
     onInput(event){
-        if(Date.now() - this.startTime + 300 > this.slideDuration){
+        if(Date.now() - this.startTime > this.sliderDuration && this.sliderAccept){
             this.done = true
+            this.parent.processUnlock()
         }
 
-        let newValue = parseInt(this.canvasElement['target'].value)
+        let newValue = parseInt(this.canvasElement.value)
         if(this.sliderDirection === 'right'){
             if(newValue >= this.oldValue){
                 this.oldValue = newValue
@@ -203,9 +209,8 @@ class Slider {
             }
         }
 
-        if (this.nbSlide > NB_SLIDES) {
-            this.done = true;
-        }
+        if(this.nbSlide === this.slideThreshold)
+            this.sliderAccept = true
     }
 
     setColor(color){
@@ -223,7 +228,6 @@ class Slider {
 
     killSlider(){
         try{
-            this.parent.gameInst.shapeUnlock()
             document.getElementById('slider').remove()
         } catch {
             console.log('slider already killed')

@@ -12,6 +12,7 @@ class TDGame {
         this.targetCanvas = null
         this.nextButton = false
 
+        this.sliderDuration = this.settings.timeLearning
         this.totalClicks = 0
         this.currStep = 0
         this.currSelected = 0
@@ -50,17 +51,13 @@ class TDGame {
         }
     }
 
-    isShapeUnlocked(shape){
+    isShapeUnlocked(shape = this.currShape){
         let index = this.settings.shapeNames.indexOf(shape)
         if(index === -1){
             console.log("Attempted to access unknown shape in shapeUnlocked: " + shape)
             return false
         }
         return this.lockStates[index] === this.settings.nbLocks
-    }
-
-    shapeUnlock(){
-
     }
 
     bindPlayfield(playfield){
@@ -97,6 +94,7 @@ class TDGame {
             console.log("Playfield must be bound before initialising game step")
             return
         }
+
         if(this.gridBacklog.length === 0){
             this.generateBlock()
         }
@@ -111,7 +109,7 @@ class TDGame {
         this.currStep++
     }
 
-    generateBlock(){
+    generateBlock() {
         let newBlockShapes = []
         for(let i = 0; i < this.settings.weights.length; i++){
             for(let j = 0; j < this.settings.weights[i]; j++){
@@ -163,7 +161,6 @@ class TDGame {
             newGrid.push([])
             for(let j = 0; j < this.settings.gridWidth; j++){
                 let newShapeName = shapeList.pop()
-                // TODO: Give grid to playfield
                 let newShape = TDGame.shapeFromName(newShapeName, this.playfield.gridX(j), this.playfield.gridY(i),
                     this.playfield.cellSize, newShapeName === targetShape, this.playfield.context)
                 newGrid[i].push(newShape)
@@ -197,7 +194,6 @@ class TDGame {
     }
 
     selectShape(row, col){
-        // TODO: Make nextbutton appear
         if(this.currShapeGrid[row][col].getShapeName() === this.currShape){
             if(this.isShapeUnlocked(this.currShape)){
                 for(let i = 0; i < this.settings.gridHeight; i++) {
