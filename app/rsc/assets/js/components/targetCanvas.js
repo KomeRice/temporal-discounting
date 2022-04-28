@@ -134,6 +134,8 @@ class TargetCanvas {
         this.context.font = "bold 18px arial"
         this.context.textAlign = "center"
 
+        if(this.slider)
+            return
 
         if(this.gameInst.isShapeUnlocked()) {
             this.context.fillStyle = this.targetColorFontUnlocked
@@ -151,6 +153,11 @@ class TargetCanvas {
     getTargetShape(){
         return tdGame.shapeFromName(this.gameInst.currShape, this.width / 2, this.height / 2,
             this.cellSize, false, this.context)
+    }
+
+    gameEndHandle() {
+        if(this.slider)
+            this.slider.killSlider()
     }
 }
 

@@ -63,6 +63,7 @@ class TDGame {
     endGame() {
         this.gameEnded = true
         document.getElementById("endGame").style.display = "flex"
+        this.targetCanvas.gameEndHandle()
     }
 
     removeLock(shape){
