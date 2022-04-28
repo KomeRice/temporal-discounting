@@ -1,5 +1,5 @@
 class PlayField {
-    constructor(canvasElement, framerate, height, width, nbRow, nbCol, cellSize, top, stroke) {
+    constructor(canvasElement, framerate, height, width, nbRow, nbCol, cellSize, top, left, stroke) {
         this.framerate = framerate
         this.height = height
         this.width = width
@@ -22,6 +22,7 @@ class PlayField {
 
         this.grid = []
         this.canvasElement.style.top = String(top) + "px"
+        this.canvasElement.style.left = String(left) + "px"
         this.context = this.canvasElement.getContext("2d")
         this.context.lineWidth = this.stroke
 

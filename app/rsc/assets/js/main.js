@@ -25,17 +25,16 @@ let infoButton = document.querySelector(".infoButton")
 infoButton.addEventListener('click', Game)
 
 async function Game() {
-    let framerate = 30
-    let cellSize = 80
-    let stroke = 1.6
-    let playfieldtop = 60
-
     // Hide experiment prompt
     document.getElementById('explainGame').style.display='none'
 
     let path = "testSettings/testSettings.json"
 
     fetch(path).then(response => response.json()).then(json => {
+        let framerate = 30
+        let cellSize = 80
+        let stroke = 2
+
         let settings = new gameSettings(
             [], json.triWeight, json.cirWeight, json.squWeight,
             json.croWeight, json.nbTargets,
@@ -44,20 +43,32 @@ async function Game() {
             json.shapeNames, json.showTimeline, json.easyMode)
 
         let tdGame = new TDGame(settings)
+
+        let playfieldTop = 60
+        let playfieldLeft = 20
+        // TODO: This should be determined depending on grid size
+        let playfieldHeight = 510
+        let playfieldWidth = 495
         let playField = new PlayField(document.getElementById("formsBoardCanvas"),
-            framerate, 510, 495, settings.gridWidth, settings.gridHeight,
-            cellSize, playfieldtop, stroke)
-        let learningPanel = new LearningPanel(document.getElementById("learningCanvas"),
-            cellSize, settings.nbLocks, settings.shapeNames, playfieldtop, 670, stroke)
-        let timeline = new Timeline(document.getElementById("timelineCanvas"), 20)
+            framerate, playfieldHeight, playfieldWidth, settings.gridWidth, settings.gridHeight,
+            cellSize, playfieldTop, playfieldLeft, stroke)
+
+        let targetCanvasLeft = playField.width + playfieldLeft + 6
         let targetCanvas = new TargetCanvas(document.getElementById("targetCanvas"),
             160, 160, 50, cellSize, 33, 2/3 * 160,
-            10, 160/2, 130, 60, 500, stroke)
+            10, 160/2, 130, 60, targetCanvasLeft, stroke)
+
+        let learningPanelLeft = targetCanvas.width + targetCanvasLeft + 10
+        let learningPanel = new LearningPanel(document.getElementById("learningCanvas"),
+            cellSize, settings.nbLocks, settings.shapeNames, playfieldTop, learningPanelLeft, stroke)
+
+        let timeline = new Timeline(document.getElementById("timelineCanvas"),
+            20, playfieldLeft,69)
 
         let nextButton = document.getElementById("nextButton")
         nextButton.style.display = ''
         nextButton.style.top = String(500) + "px;"
-        nextButton.style.marginLeft = String(500 + stroke) + "px"
+        nextButton.style.marginLeft = String(targetCanvasLeft + 4) + "px"
         nextButton.style.marginTop = String(280) + "px"
         nextButton.disabled = true
 
