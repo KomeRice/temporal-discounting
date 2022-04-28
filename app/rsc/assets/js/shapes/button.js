@@ -23,7 +23,7 @@ class Button {
         this.ctx.beginPath();
         this.ctx.strokeStyle = this.colorStroke;
         this.ctx.lineWidth = "4";
-        this.ctx.moveTo(this.left + this.radius, this.top);
+        this.ctx.moveTo(this.left + this.radius - 2, this.top);
         this.ctx.lineTo(this.right - this.radius, this.top);
         this.ctx.quadraticCurveTo(this.right, this.top, this.right, this.top + this.radius);
         this.ctx.lineTo(this.right, this.bottom - this.radius);
