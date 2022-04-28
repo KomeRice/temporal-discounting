@@ -20,7 +20,8 @@ class Timeline {
         this.shapeTimeline = []
         this.gameInst = null
 
-        this.indexer = new Indexer(this.getDrawX(0), this.getDrawY(), this.indexColor, this.index_size, this.context);
+        this.indexer = new Indexer(this.getDrawX(0), this.getDrawY(),
+            this.index_size, this.index_size, this.context, this.indexColor);
     }
 
     appendTimeline(shape){
@@ -67,7 +68,9 @@ class Timeline {
     }
 
     draw() {
+        this.drawBoard()
         this.drawStep()
+        this.indexer.draw()
     }
 }
 
