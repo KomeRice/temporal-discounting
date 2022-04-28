@@ -7,8 +7,8 @@ class LearningPanel{
         this.imgHeight = 5 * cellSize / 12
         this.imgMargin = cellSize / 2
         this.canvMargin = cellSize
-        this.height = cellSize * (shapeNames.length + 1) + this.canvMargin / 2
-        this.width = 3 / 2 * cellSize + maxLockCount + 1 * (this.imgWidth + this.imgMargin / 3)
+        this.height = cellSize * (shapeNames.length + 1)
+        this.width = 6 / 5 * cellSize + (maxLockCount + 1) * (this.imgWidth + this.imgMargin / 3)
 
         this.canvasElement = canvasElement
         this.canvasElement.height = this.height
