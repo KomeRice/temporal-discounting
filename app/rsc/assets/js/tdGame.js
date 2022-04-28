@@ -1,4 +1,3 @@
-import gameSettings from "./gameSettings.js";
 import Triangle from "./shapes/triangle.js"
 import Circle from "./shapes/circle.js";
 import Square from "./shapes/square.js";
