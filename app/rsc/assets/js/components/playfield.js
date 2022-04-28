@@ -49,7 +49,7 @@ class PlayField {
 
         for (let row of this.gameInst.currShapeGrid) {
             for (let shape of row) {
-                if (shape.contains(x, y) && !shape.selected) {
+                if (shape.contains(x, y, this.gameInst.settings.easyMode) && !shape.selected) {
                     shape.highlight = true
                     document.body.style.cursor = "pointer";
                     return
@@ -64,7 +64,7 @@ class PlayField {
         for (let row = 0; row < this.gameInst.currShapeGrid.length; row++) {
             for (let col = 0; col < this.gameInst.currShapeGrid[row].length; col++) {
                 let shape = this.gameInst.currShapeGrid[row][col]
-                if(shape.contains(x, y) && !shape.selected){
+                if(shape.contains(x, y, this.gameInst.settings.easyMode) && !shape.selected){
                     this.gameInst.selectShape(row, col)
                 }
             }
