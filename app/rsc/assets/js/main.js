@@ -40,7 +40,7 @@ async function Game() {
             json.croWeight, json.nbTargets,
             json.timeLearning, json.nbSliders,
             json.nbLocks, json.gridWidth, json.gridHeight,
-            json.shapeNames, json.showTimeline, json.easyMode)
+            json.shapeNames, json.maxStep, json.maxTimer, json.showTimeline, json.easyMode)
 
         let tdGame = new TDGame(settings)
 
@@ -77,6 +77,7 @@ async function Game() {
         tdGame.initNewStep()
 
         function tick() {
+            tdGame.tick()
             tdGame.playfield.draw()
             tdGame.timeline.draw()
             tdGame.targetCanvas.draw()

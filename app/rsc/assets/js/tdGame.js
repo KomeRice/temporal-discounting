@@ -25,6 +25,26 @@ class TDGame {
         for(let i = 0; i < this.settings.shapeNames.length; i++){
             this.lockStates.push(0)
         }
+
+        this.startTime = Date.now()
+    }
+
+    tick() {
+        let gameLength = Date.now() - this.startTime
+        if(gameLength > this.settings.maxTimer && this.settings.maxTimer !== -1) {
+            this.endGame()
+        }
+    }
+
+    nextStep() {
+        if(this.currStep > this.settings.maxStep - 1 && this.settings.maxStep !== -1)
+            this.endGame()
+        this.nextButton.disabled = true
+        this.initNewStep()
+    }
+
+    endGame() {
+        document.getElementById("endGame").style.display = "flex"
     }
 
     removeLock(shape){
@@ -221,11 +241,6 @@ class TDGame {
     allSelected(){
         this.targetCanvas.unlockButtonClickable = true
         this.nextButton.disabled = false
-    }
-
-    nextStep() {
-        this.nextButton.disabled = true
-        this.initNewStep()
     }
 
     static shuffle(a) {
