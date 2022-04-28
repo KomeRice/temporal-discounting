@@ -199,7 +199,7 @@ class TDGame {
                 for(let i = 0; i < this.settings.gridHeight; i++) {
                     for(let j = 0; j < this.settings.gridWidth; j++){
                         if(this.currShapeGrid[i][j].getShapeName() === this.currShape){
-                            this.currShapeGrid.selected = true
+                            this.currShapeGrid[i][j].selected = true
                         }
                     }
                 }
