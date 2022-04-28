@@ -52,6 +52,7 @@ class TargetCanvas {
 
         this.slider = null
         this.gameInst = null
+        this.unlockUsed = false
     }
 
     newStepProcess(){
@@ -67,6 +68,7 @@ class TargetCanvas {
         if(this.slider)
             this.slider.killSlider()
         this.targetShapeDisplay = this.getTargetShape()
+        this.unlockUsed = false
 
     }
 
@@ -103,6 +105,7 @@ class TargetCanvas {
                 , this.left + this.unlockRadius, this.width * 0.9,
                 this.targetShapeDisplay.colorUnlit, this.gameInst.sliderDuration)
             this.displayUnlockButton = false
+            this.unlockButtonClickable = false
             document.body.style.cursor = "auto";
         }
     }
@@ -111,6 +114,7 @@ class TargetCanvas {
         this.slider.killSlider()
         this.slider = null
         this.gameInst.shapeUnlockOne()
+        this.unlockUsed = true
     }
 
     draw(){
@@ -132,6 +136,10 @@ class TargetCanvas {
 
 
         if(this.gameInst.isShapeUnlocked()) {
+            this.context.fillStyle = this.targetColorFontUnlocked
+            this.context.fillText("EXPERT", this.width / 2, this.unlockY + 5)
+        }
+        else if(this.unlockUsed){
             this.context.fillStyle = this.targetColorFontUnlocked
             this.context.fillText("UNLOCKED", this.width / 2, this.unlockY + 5)
         }
