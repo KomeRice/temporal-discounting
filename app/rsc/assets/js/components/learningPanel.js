@@ -21,7 +21,6 @@ class LearningPanel{
         this.colorSelect = "white"
 
         this.context = this.canvasElement.getContext("2d")
-        // TODO: Fill this
         this.stroke = stroke
         this.context.lineWidth = stroke
 
