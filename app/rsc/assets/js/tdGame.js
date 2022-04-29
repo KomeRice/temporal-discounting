@@ -31,6 +31,9 @@ class TDGame {
     }
 
     tick() {
+        // TODO: 20% interval pauses / 2-3mins - Display percentage of timer?
+        // TODO: Remove timer
+        // TODO: Cycle locks
         let gameLength = Date.now() - this.startTime
         if(gameLength > this.settings.maxTimer && this.settings.maxTimer !== -1) {
             this.endGame()
