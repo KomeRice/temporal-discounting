@@ -62,6 +62,7 @@ class TargetCanvas {
         }
         else{
             this.displayUnlockButton = true
+            this.unlockButtonClickable = false
             this.unlockButton = new Button(this.unlockX, this.unlockY,
                 this.unlockWidth, this.unlockHeight, this.unlockRadius, this.context)
         }
@@ -71,7 +72,6 @@ class TargetCanvas {
         }
         this.targetShapeDisplay = this.getTargetShape()
         this.unlockUsed = false
-
     }
 
     highlightButton(event){
