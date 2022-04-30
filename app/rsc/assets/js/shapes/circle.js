@@ -38,10 +38,14 @@ class Circle extends Shape {
 
     contains(x, y, easyMode=false) {
         if (easyMode){
-            return this.left < x < this.right && this.top < y < this.bottom;
+            return this.left < x && x < this.right && this.top < y && y < this.bottom;
         }
         return Math.abs(x - this.x) < this.radius &&
             Math.abs(this.y - y) < this.radius;
+    }
+
+    getShapeName(){
+        return "Circle"
     }
 }
 

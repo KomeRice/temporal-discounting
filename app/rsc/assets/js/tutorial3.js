@@ -854,10 +854,10 @@ function GameTuto3() {
         const slider = document.createElement('input');
         slider.id = 'slider';
         slider.type = 'range'
-        slider.style.marginTop = String(TL_HEIGHT + SC_HEIGHT + 2 * TC_TOP_MARGIN + TC_HEIGHT) + "px";
-        slider.style.left = String(WIDTH + STROKE) + "px";
+        slider.style.marginTop = String(UNLOCK_X * 2.9) + "px";
+        slider.style.left = String(UNLOCK_Y * 2.97) + "px";
         slider.style.position = 'absolute';
-        slider.style.width = String(TC_WIDTH - STROKE) + "px";
+        slider.style.width = String((TC_WIDTH - STROKE) * 0.9) + "px";
         slider.onmouseover = function() { this.style.cursor = 'grab' };
         slider.onmousedown = function() {
             this.style.cursor = 'grabbing';
@@ -1092,9 +1092,9 @@ function GameTuto3() {
 
     //load img
     var imgLock = new Image();
-    imgLock.src = 'lock.png';
+    imgLock.src = 'rsc/img/lock.png';
     var imgUnlock = new Image();
-    imgUnlock.src = 'unlock.png';
+    imgUnlock.src = 'rsc/img/unlock.png';
 
     //set up context
     var ctxLearning = learningCanvas.getContext("2d");

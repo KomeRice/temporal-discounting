@@ -32,8 +32,15 @@ class Square extends Shape{
         this.ctx.fillRect(this.left + this.vibrateX, this.top, this.width, this.height);
     }
 
-    contains(x, y) {
+    // easyMode parameter for proper code coherence, since the shape
+    // is already a square, easyMode would do nothing
+    // noinspection JSUnusedLocalSymbols
+    contains(x, y, easyMode=false) {
         return this.left < x && x < this.right && this.top < y && y < this.bottom;
+    }
+
+    getShapeName(){
+        return "Square"
     }
 }
 

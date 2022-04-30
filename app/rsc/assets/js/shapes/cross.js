@@ -51,6 +51,10 @@ class Cross extends Shape {
             this.rect2x < x && x < this.rect2x + this.width &&
             this.rect2y < y && y < this.rect2y + this.thickness;
     }
+
+    getShapeName(){
+        return "Cross"
+    }
 }
 
 export default Cross

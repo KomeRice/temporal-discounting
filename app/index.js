@@ -11,37 +11,30 @@ app = init();
 const Datastore = require('nedb');
 const nodemailer = require("nodemailer");
 
+let fs = require('fs')
+let lockDecider = Math.floor(Math.random() * 100)
+
+
+
 app.get('/', function(req, res) {
-	res.sendFile(__dirname + '/index.html');
+	res.sendFile(__dirname + '/tutorial.html');
 });
-const express = require('./myexpress-init/node_modules/express');
+const express = require('./myexpress-init/node_modules/express')
 app.use(express.static(__dirname + '/'));
+app.use(express.json( /*{limit:'1mb'} */ ));
+
+const database = new Datastore({ filename: './rsc/data/database.db', autoload: true });
+
+//database.remove({}, { multi: true }, function(err, numRemoved) {
+//   database.loadDatabase(function(err) {});
+//});
 
 
-const database = new Datastore('database.db');
-database.loadDatabase(function(err){
-	if (err){
-		console.log("Database not loaded : ", err);
-	}else{
-		console.log("Successfuly loaded database");
-	}
-});
-
-// database.remove({}, { multi: true }, function(err, numRemoved) {
-//    database.loadDatabase(function(err) {});
-// });
-
-const gameParameters = new Datastore('gameParameters.db');
-gameParameters.loadDatabase(function(err){
-	if (err){
-		console.log("Database not loaded : ", err);
-	}else{
-		console.log("Successfuly loaded database");
-	}
-});
+const gameParameters = new Datastore({ filename: './rsc/data/gameParameters.db', autoload: true });
 const betweenElementIndexMemory = [];
 
 app.get('/api', (request, response) => {
+	console.log(database);
     database.find({}, (err, data) => {
         if (err) {
             response.end();
@@ -51,7 +44,45 @@ app.get('/api', (request, response) => {
     });
 });
 
+app.get('/lockDecider', (request, response) => {
+    console.log('Served lock decider ' + lockDecider)
+    response.json({value: lockDecider})
+    lockDecider++
+})
 
+app.post('/logdata', (request, response) => {
+    let path = 'rsc/data/gameData.csv'
+    let data = request.body.value
+    let success = false
+
+    let header = 'date, user_ip, trial_id, block_id, n_trials, n_block, block_size,' +
+        ' target_shape, target_id, target_freq, target_n, timeLearning, setting_used, n_locks,' +
+        'lock_duration, unlock_action, lock_state, occurrence, time, time_selected, time_next,' +
+        'slider_display_span, n_opened_locker, first_unlock_occurrence, first_unlock_trial, nb_total_click,' +
+        'exp_total_time, mode_used\n'
+
+    fs.writeFile(path, header, { flag: 'wx' }, function (err) {
+        if (err){
+            return
+        }
+        console.log("File created successfully");
+    });
+
+    fs.appendFile(path, data + '\n', function(err) {
+        if(err) {
+            console.log(path + ' : error while accessing: ' + err)
+			return
+        }
+        console.log('Data saved successfully')
+        success = true
+    })
+    let status = 'failure'
+    if(success)
+        status = 'success'
+    response.json({
+        status: status,
+    })
+})
 
 app.post('/api', (request, response) => {
     console.log('I got a request to log data');
@@ -69,7 +100,6 @@ app.post('/api', (request, response) => {
 app.get('/gameParameters' /*getData*/ , (request, response) => {
     gameParameters.find({}, (err, data) => {
         if (err) {
-			console.log("could not find");
             response.end();
             return;
         }
@@ -96,7 +126,6 @@ app.get('/settings', (request, response) => {
 
     gameParameters.find({}, (err, data) => {
         if (err) {
-			console.log("could not find");
             response.end();
             return;
         }
@@ -107,7 +136,7 @@ app.get('/settings', (request, response) => {
 
 app.post('/settings', (request, response) => {
     console.log('I got a request to update settings');
-	console.log(request);
+
     const data = request.body;
     //change database of the game parameters :
     gameParameters.remove({}, { multi: true }, function(err, numRemoved) {
@@ -148,13 +177,13 @@ app.post('/mail', (request, response) => {
 
     // send mail with defined transport object
     //let info = await 
-    transporter.sendMail({
+/*     transporter.sendMail({
         from: '"IHM expert" <ihmexpert2020@gmail.com>', // sender address
         to: "gilles.bailly@sorbonne-universite.fr", // list of receivers
         subject: "Comment", // Subject line
         //text: "Hello world?", // plain text body
         html: mail.content, // html body
-    });
+    }); */
 
     //console.log("Message sent: %s", info.messageId);
 
