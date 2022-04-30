@@ -3,7 +3,7 @@ class gameSettings{
                 timeLearning, nbSliders, nbLocks, gridWidth, gridHeight,
                 shapeNames = ["Triangle", "Circle", "Square", "Cross"],
                 maxStep, maxTimer, noviceTime, breakTimer, lockDecider = 0,
-                showTimeline = true, easyMode = false) {
+                showTimeline = true, easyMode = false, debug= false) {
 
         // Shape generation
         // TODO: Generify weights
@@ -32,6 +32,7 @@ class gameSettings{
         this.maxTimer = maxTimer
         this.noviceTime = noviceTime
         this.breakTimer = breakTimer
+        this.debug = debug
     }
 }
 

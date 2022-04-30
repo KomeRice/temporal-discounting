@@ -62,14 +62,16 @@ app.post('/logdata', (request, response) => {
         'exp_total_time, mode_used\n'
 
     fs.writeFile(path, header, { flag: 'wx' }, function (err) {
-        if (err)
-            console.log('File does not exist and failed to be created');
+        if (err){
+            return
+        }
         console.log("File created successfully");
     });
 
     fs.appendFile(path, data + '\n', function(err) {
         if(err) {
-            console.log(path + ' : error while accessing')
+            console.log(path + ' : error while accessing: ' + err)
+			return
         }
         console.log('Data saved successfully')
         success = true

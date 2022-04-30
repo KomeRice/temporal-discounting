@@ -5,7 +5,7 @@ import Cross from "./shapes/cross.js";
 import GameLog from "./gameLog.js";
 
 class TDGame {
-    constructor(settings) {
+    constructor(settings, ipAddress = null) {
         this.settings = settings
         this.playfield = null
         this.timeline = null
@@ -25,7 +25,7 @@ class TDGame {
         for(let i = 0; i < this.settings.shapeNames.length; i++){
             this.lockStates.push(0)
         }
-
+        this.userIp = ipAddress
 
         this.gameEnded = false
         this.startTime = Date.now()
@@ -38,7 +38,7 @@ class TDGame {
         this.gameLog = new GameLog(this.startTime, this.sliderDuration, this.sumWeight(),
             this.settings.shapeNames, this.settings.nbLocks, this.settings.nbTargets,
             this.settings.triWeight, this.settings.cirWeight, this.settings.squWeight,
-            this.settings.croWeight, this.settings.timeLearning)
+            this.settings.croWeight, this.settings.timeLearning, this.userIp)
 
 
         document.body.addEventListener("mousedown", () => this.addClick())

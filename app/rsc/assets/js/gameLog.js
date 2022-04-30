@@ -1,15 +1,9 @@
 class GameLog {
     constructor(initDate, sliderDuration,
                 nbShapesByBlock, shapeNames, nbLocks, nbTargets,
-                triWeight, cirWeight, squWeight, croWeight, learningTime) {
+                triWeight, cirWeight, squWeight, croWeight, learningTime, ipAddress) {
         this.initDate = initDate
-
-        this.ipAddress = null
-        $.getJSON("https://api.ipify.org?format=json", function(data) {
-            this.ipAddress = data.ip;
-            console.log(data.ip)
-            console.log('owo')
-        });
+        this.ipAddress = ipAddress
 
         this.trialId = []
         this.blockId = []

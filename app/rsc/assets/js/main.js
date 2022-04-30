@@ -26,6 +26,11 @@ function updateBreakBox(timeLeft, currentCompletion) {
 //                  GAME variables to post in the database
 //--------------------------------------------------------------------------------
 
+let ipAddress = null;
+$.getJSON("https://api.ipify.org?format=json", function(data) {
+    ipAddress = data.ip;
+});
+
 let infoButton = document.querySelector(".infoButton")
 infoButton.addEventListener('click', Game)
 
@@ -55,10 +60,10 @@ async function Game() {
                 json.timeLearning, json.nbSliders,
                 json.nbLocks, json.gridWidth, json.gridHeight,
                 json.shapeNames, json.maxStep, json.maxTimer, json.noviceTime, json.breakTimer, lockDecider,
-                json.showTimeline, json.easyMode)
+                json.showTimeline, json.easyMode, json.debug)
             let shapeWeights = json.triWeight + json.cirWeight + json.squWeight + json.croWeight
 
-            let tdGame = new TDGame(settings)
+            let tdGame = new TDGame(settings, ipAddress)
 
             let playfieldTop = 60
             let playfieldLeft = 20
