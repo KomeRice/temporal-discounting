@@ -11,6 +11,10 @@ app = init();
 const Datastore = require('nedb');
 const nodemailer = require("nodemailer");
 
+let fs = require('fs')
+let lockDecider = Math.floor(Math.random() * 100)
+
+
 
 app.get('/', function(req, res) {
 	res.sendFile(__dirname + '/tutorial.html');
@@ -32,19 +36,51 @@ const betweenElementIndexMemory = [];
 app.get('/api', (request, response) => {
 	console.log(database);
     database.find({}, (err, data) => {
-		console.log('IN DATABASE FIND');
         if (err) {
-			console.log('ERROR IN GET API');
             response.end();
             return;
         }
-		console.log('GET API SUCCESS');
         response.json(data);
     });
-	console.log('OUT OF GET');
 });
 
+app.get('/lockDecider', (request, response) => {
+    console.log('Served lock decider ' + lockDecider)
+    response.json({value: lockDecider})
+    lockDecider++
+})
 
+app.post('/logdata', (request, response) => {
+    let path = 'rsc/data/gameData.csv'
+    let data = request.body.value
+    let success = false
+
+    let header = 'date, user_ip, trial_id, block_id, n_trials, n_block, block_size,' +
+        ' target_shape, target_id, target_freq, target_n, timeLearning, setting_used, n_locks,' +
+        'lock_duration, unlock_action, lock_state, occurrence, time, time_selected, time_next,' +
+        'slider_display_span, n_opened_locker, first_unlock_occurrence, first_unlock_trial, nb_total_click,' +
+        'exp_total_time, mode_used\n'
+
+    fs.writeFile(path, header, { flag: 'wx' }, function (err) {
+        if (err)
+            console.log('File does not exist and failed to be created');
+        console.log("File created successfully");
+    });
+
+    fs.appendFile(path, data + '\n', function(err) {
+        if(err) {
+            console.log(path + ' : error while accessing')
+        }
+        console.log('Data saved successfully')
+        success = true
+    })
+    let status = 'failure'
+    if(success)
+        status = 'success'
+    response.json({
+        status: status,
+    })
+})
 
 app.post('/api', (request, response) => {
     console.log('I got a request to log data');

@@ -2,6 +2,7 @@ import Triangle from "./shapes/triangle.js"
 import Circle from "./shapes/circle.js";
 import Square from "./shapes/square.js";
 import Cross from "./shapes/cross.js";
+import GameLog from "./gameLog.js";
 
 class TDGame {
     constructor(settings) {
@@ -12,8 +13,7 @@ class TDGame {
         this.targetCanvas = null
         this.nextButton = false
 
-        this.sliderDuration = this.settings.timeLearning / this.settings.nbLocks - this.settings.noviceTime
-        this.totalClicks = 0
+        this.sliderDuration = Math.max(0, this.settings.timeLearning / this.settings.nbLocks - this.settings.noviceTime)
         this.currStep = 0
         this.currSelected = 0
 
@@ -26,8 +26,22 @@ class TDGame {
             this.lockStates.push(0)
         }
 
+
         this.gameEnded = false
         this.startTime = Date.now()
+        this.startStepTime = Date.now()
+        this.allShapesSelectedTime = null
+
+        this.stepClicks = 0
+        this.stepMode = "novice"
+
+        this.gameLog = new GameLog(this.startTime, this.sliderDuration, this.sumWeight(),
+            this.settings.shapeNames, this.settings.nbLocks, this.settings.nbTargets,
+            this.settings.triWeight, this.settings.cirWeight, this.settings.squWeight,
+            this.settings.croWeight, this.settings.timeLearning)
+
+
+        document.body.addEventListener("mousedown", () => this.addClick())
     }
 
     tick() {
@@ -35,39 +49,57 @@ class TDGame {
         // TODO: Remove timer
         // TODO: Cycle locks
         let gameLength = Date.now() - this.startTime
-        if(gameLength > this.settings.maxTimer && this.settings.maxTimer !== -1) {
+        if(gameLength > this.settings.maxTimer && this.settings.maxTimer !== -1 && !this.gameEnded) {
             this.endGame()
         }
     }
 
-    getCurrTime() {
-        if(this.gameEnded)
-            return this.settings.maxTimer
-        return Date.now() - this.startTime
-    }
-
-    getCurrStep(){
-        if(this.currStep > this.settings.maxStep && this.settings.maxStep !== -1)
-            return this.settings.maxStep
-        return this.currStep
-    }
-
-    getMaxTime() {
-        return this.settings.maxTimer
-    }
-
     nextStep() {
-        if(this.currStep > this.settings.maxStep - 1 && this.settings.maxStep !== -1)
+        let timeTakenStep = Date.now() - this.startStepTime
+        this.logData(timeTakenStep)
+
+        if(this.currStep > this.settings.maxStep - 1 && this.settings.maxStep !== -1 && !this.gameEnded)
             this.endGame()
+
+        this.stepClicks = 0
+        this.stepMode = "novice"
+        this.startStepTime = Date.now()
         this.nextButton.disabled = true
         this.initNewStep()
     }
 
     endGame() {
         this.gameEnded = true
+        this.gameLog.registerEnd(this.currStep, Date.now() - this.startTime)
         document.getElementById("endGame").style.display = "flex"
         this.targetCanvas.gameEndHandle()
+
+        let data = this.gameLog.exportAsString()
+        let options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({value: data})
+        }
+
+        fetch('/logdata', options).then(r => function (r) {
+            console.log('Log status: ' + r)
+        })
     }
+
+    startBreak() {
+        document.getElementById("breakTime").style.display = "flex"
+    }
+
+    logData(timeTakenStep) {
+        let sliderApparition = this.targetCanvas.getSliderLifetime()
+
+        this.gameLog.registerStep(this.getCurrStep(), this.currShape,
+            this.getLockState(this.currShape), timeTakenStep, this.allShapesSelectedTime
+            , this.stepClicks, this.stepMode, sliderApparition)
+    }
+
 
     removeLock(shape){
         let index = this.settings.shapeNames.indexOf(shape)
@@ -89,17 +121,22 @@ class TDGame {
         }
 
         if(!this.isShapeUnlocked(shape)){
+            this.stepMode = "learning"
             this.lockStates[index]++
         }
     }
 
-    isShapeUnlocked(shape = this.currShape){
+    getLockState(shape) {
         let index = this.settings.shapeNames.indexOf(shape)
         if(index === -1){
             console.log("Attempted to access unknown shape in shapeUnlocked: " + shape)
-            return false
+            return -1
         }
-        return this.lockStates[index] === this.settings.nbLocks
+        return this.lockStates[index]
+    }
+
+    isShapeUnlocked(shape = this.currShape){
+        return this.getLockState(shape) === this.settings.nbLocks
     }
 
     bindPlayfield(playfield){
@@ -165,7 +202,7 @@ class TDGame {
         this.shapeBacklog = this.shapeBacklog.concat(newBlockShapes)
 
         for(let shapeName in newBlockShapes){
-            this.gridBacklog.push(this.generateGrid(this.shapeBacklog[shapeName]))
+            this.gridBacklog.push(this.generateGrid(newBlockShapes[shapeName]))
         }
     }
 
@@ -218,7 +255,7 @@ class TDGame {
     }
 
     addClick(){
-        this.totalClicks++
+        this.stepClicks++
     }
 
     sumWeight(){
@@ -246,6 +283,7 @@ class TDGame {
                         }
                     }
                 }
+                this.stepMode = "expert"
                 this.allSelected()
             }
             else{
@@ -262,8 +300,25 @@ class TDGame {
     }
 
     allSelected(){
+        this.allShapesSelectedTime = Date.now() - this.startStepTime
         this.targetCanvas.unlockButtonClickable = true
         this.nextButton.disabled = false
+    }
+
+    getCurrTime() {
+        if(this.gameEnded)
+            return this.settings.maxTimer
+        return Date.now() - this.startTime
+    }
+
+    getCurrStep(){
+        if(this.currStep > this.settings.maxStep && this.settings.maxStep !== -1)
+            return this.settings.maxStep
+        return this.currStep
+    }
+
+    getMaxTime() {
+        return this.settings.maxTimer
     }
 
     static shuffle(a) {

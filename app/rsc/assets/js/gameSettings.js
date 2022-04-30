@@ -1,7 +1,8 @@
 class gameSettings{
     constructor(weights, triWeight, cirWeight, squWeight, croWeight, nbTargets,
                 timeLearning, nbSliders, nbLocks, gridWidth, gridHeight,
-                shapeNames = ["Triangle", "Circle", "Square", "Cross"], maxStep, maxTimer, noviceTime,
+                shapeNames = ["Triangle", "Circle", "Square", "Cross"],
+                maxStep, maxTimer, noviceTime, breakTimer, lockDecider = 0,
                 showTimeline = true, easyMode = false) {
 
         // Shape generation
@@ -20,9 +21,8 @@ class gameSettings{
         this.gridWidth = gridWidth
         this.gridHeight = gridHeight
 
-
         this.nbSliders = nbSliders
-        this.nbLocks = nbLocks
+        this.nbLocks = nbLocks[lockDecider % nbLocks.length]
 
         this.showTimeline = showTimeline
         this.timeLearning = timeLearning
@@ -31,6 +31,7 @@ class gameSettings{
         this.maxStep = maxStep
         this.maxTimer = maxTimer
         this.noviceTime = noviceTime
+        this.breakTimer = breakTimer
     }
 }
 

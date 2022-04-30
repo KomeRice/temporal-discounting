@@ -56,6 +56,7 @@ class TargetCanvas {
     }
 
     newStepProcess(){
+        this.sliderLifeTimeIfKilled = null
         if(this.gameInst.isShapeUnlocked(this.gameInst.currShape)) {
             this.displayUnlockButton = false
             this.unlockButton = null
@@ -72,6 +73,14 @@ class TargetCanvas {
         }
         this.targetShapeDisplay = this.getTargetShape()
         this.unlockUsed = false
+    }
+
+    getSliderLifetime() {
+        if(this.slider)
+            return this.slider.getLifeTime()
+        if(this.sliderLifeTimeIfKilled)
+            return this.sliderLifeTimeIfKilled
+        return -1
     }
 
     highlightButton(event){
@@ -113,6 +122,7 @@ class TargetCanvas {
     }
 
     processUnlock() {
+        this.sliderLifeTimeIfKilled = this.slider.getLifeTime()
         this.slider.killSlider()
         this.slider = null
         this.gameInst.shapeUnlockOne()
@@ -199,6 +209,7 @@ class Slider {
         this.nbSlide = 0
         this.slideThreshold = slideThreshold
         this.sliderAccept = false
+        this.sliderDateAppearance = Date.now()
     }
 
     onInput(event){
@@ -243,6 +254,10 @@ class Slider {
     mouseDown(){
         this.canvasElement.style.cursor = 'grabbing';
         this.startTime = Date.now()
+    }
+
+    getLifeTime() {
+        return Date.now() - this.sliderDateAppearance
     }
 
     killSlider(){

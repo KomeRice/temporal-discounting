@@ -6,7 +6,13 @@
   "nbTargets": 5,
   "timeLearning": 30000,
   "nbSliders": 1,
-  "nbLocks": 3,
+  "nbLocks": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
   "gridWidth": 4,
   "gridHeight": 4,
   "shapeNames": [
@@ -18,6 +24,7 @@
   "showTimeline": true,
   "easyMode": true,
   "maxStep": -1,
-  "maxTimer": 50000,
-  "noviceTime": 4200
+  "maxTimer": 60000,
+  "noviceTime": 4200,
+  "breakTimer": 180000
 }
