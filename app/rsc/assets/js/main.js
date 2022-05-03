@@ -79,7 +79,7 @@ async function Game() {
                 cellSize, settings.nbLocks, settings.shapeNames, playfieldTop, learningPanelLeft, stroke)
 
             let timeline = new Timeline(document.getElementById("timelineCanvas"),
-                20, playfieldLeft, 32, shapeWeights)
+                20, playfieldLeft, 64, shapeWeights * 6)
 
             let nextButton = document.getElementById("nextButton")
             nextButton.style.display = ''

@@ -57,17 +57,14 @@ class TDGame {
     }
 
     tick() {
-        // TODO: 20% interval pauses / 2-3mins - Display percentage of timer?
-        let gameLength = this.getCurrTime()
         if(Date.now() - this.lastBreakEndedTime > this.settings.breakTimer && !this.setToBreak)
             this.setToBreak = true
-
-        if(gameLength > this.settings.maxTimer && this.settings.maxTimer !== -1 && !this.gameEnded && !this.inBreak) {
-            this.endGame()
-        }
     }
 
     nextStep() {
+        if(this.getCurrTime() > this.settings.maxTimer && this.settings.maxTimer !== -1 && !this.gameEnded && !this.inBreak) {
+            this.endGame()
+        }
         if(this.setToBreak && (this.currStep < this.settings.maxStep - 1 || this.settings.maxStep === -1)) {
             this.endedStepTime = Date.now()
             this.startBreak()
@@ -117,7 +114,7 @@ class TDGame {
         let stepString = this.getCurrStep()
         if(this.settings.maxStep === -1)
             stepString = "Uncapped"
-        let timerString = (Timeline.msToSeconds(this.getMaxTime() - this.getCurrTime())) + "s"
+        let timerString = ((Timeline.msToSeconds(this.getMaxTime() - this.getCurrTime())) / 60).toFixed(2) + " minutes"
         if(this.settings.maxTimer === -1)
             timerString = "Uncapped"
 
@@ -220,8 +217,8 @@ class TDGame {
         }
 
         if(this.gridBacklog.length < this.sumWeight()){
-            this.generateBlock()
-            this.generateBlock()
+            for(let i = 0; i < 10; i++)
+                this.generateBlock()
         }
 
         this.timeline.refreshTimeline()
