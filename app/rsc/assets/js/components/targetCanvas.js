@@ -220,7 +220,7 @@ class Slider {
     }
 
     onInput(event){
-        if(Date.now() - this.startTime > this.sliderDuration - 200 && this.sliderAccept){
+        if(Date.now() - this.startTime > this.sliderDuration - 250 && this.sliderAccept){
             this.done = true
             this.parent.processUnlock()
         }
