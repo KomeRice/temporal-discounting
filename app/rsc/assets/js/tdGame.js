@@ -63,6 +63,8 @@ class TDGame {
 
     nextStep() {
         if(this.getCurrTime() > this.settings.maxTimer && this.settings.maxTimer !== -1 && !this.gameEnded && !this.inBreak) {
+            let timeTakenStep = Date.now() - this.startStepTime
+            this.logData(timeTakenStep)
             this.endGame()
         }
         if(this.setToBreak && (this.currStep < this.settings.maxStep - 1 || this.settings.maxStep === -1)) {
@@ -121,7 +123,7 @@ class TDGame {
         let breakWindow = document.getElementById("breakTime")
         breakWindow.style.display = "flex"
         document.getElementById("timeLeft").innerHTML = timerString
-        document.getElementById("currentCompletion").innerHTML = stepString
+        //document.getElementById("currentCompletion").innerHTML = stepString
     }
 
     endBreak() {

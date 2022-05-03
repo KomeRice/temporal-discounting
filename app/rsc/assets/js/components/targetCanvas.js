@@ -196,7 +196,6 @@ class Slider {
         this.canvasElement.addEventListener("mousemove", (event) => this.setCursorStyleGrab(event))
         this.canvasElement.addEventListener("mouseup", (event) => this.setCursorStyleGrab(event))
         this.canvasElement.addEventListener("mousedown", (event) => this.mouseDown(event))
-        this.canvasElement.addEventListener("mousedown", (event) => this.mouseDown(event))
         this.canvasElement.addEventListener("input", (event) => this.onInput(event))
 
         this.canvasElement.style.background = color
@@ -213,7 +212,7 @@ class Slider {
     }
 
     onInput(event){
-        if(Date.now() - this.startTime > this.sliderDuration && this.sliderAccept){
+        if(Date.now() - this.startTime > this.sliderDuration - 273 && this.sliderAccept){
             this.done = true
             this.parent.processUnlock()
         }
