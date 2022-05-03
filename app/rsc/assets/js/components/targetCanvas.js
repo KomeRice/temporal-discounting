@@ -75,6 +75,14 @@ class TargetCanvas {
         this.unlockUsed = false
     }
 
+    destroySlider() {
+        if(this.slider) {
+            this.sliderLifeTimeIfKilled = this.slider.getLifeTime()
+            this.slider.killSlider()
+            this.slider = null
+        }
+    }
+
     getSliderLifetime() {
         if(this.slider)
             return this.slider.getLifeTime()
@@ -212,7 +220,7 @@ class Slider {
     }
 
     onInput(event){
-        if(Date.now() - this.startTime > this.sliderDuration - 273 && this.sliderAccept){
+        if(Date.now() - this.startTime > this.sliderDuration - 200 && this.sliderAccept){
             this.done = true
             this.parent.processUnlock()
         }

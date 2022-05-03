@@ -69,6 +69,7 @@ class TDGame {
         }
         if(this.setToBreak && (this.currStep < this.settings.maxStep - 1 || this.settings.maxStep === -1)) {
             this.endedStepTime = Date.now()
+            this.targetCanvas.destroySlider()
             this.startBreak()
             return
         }
