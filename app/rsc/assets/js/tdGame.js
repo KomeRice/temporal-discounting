@@ -31,6 +31,7 @@ class TDGame {
         this.gameEnded = false
         this.startTime = Date.now()
         this.startStepTime = Date.now()
+        this.endedStepTime = null
         this.allShapesSelectedTime = null
 
         this.breakStartTime = Date.now()
@@ -68,11 +69,15 @@ class TDGame {
 
     nextStep() {
         if(this.setToBreak && (this.currStep < this.settings.maxStep - 1 || this.settings.maxStep === -1)) {
+            this.endedStepTime = Date.now()
             this.startBreak()
             return
         }
-
         let timeTakenStep = Date.now() - this.startStepTime
+        if(this.endedStepTime){
+            timeTakenStep = this.endedStepTime - this.startStepTime
+            this.endedStepTime = null
+        }
         this.logData(timeTakenStep)
 
         if(this.currStep > this.settings.maxStep - 1 && this.settings.maxStep !== -1 && !this.gameEnded)
