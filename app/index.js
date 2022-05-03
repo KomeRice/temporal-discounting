@@ -55,11 +55,11 @@ app.post('/logdata', (request, response) => {
     let data = request.body.value
     let success = false
 
-    let header = 'date, user_ip, trial_id, block_id, n_trials, n_block, block_size,' +
-        ' target_shape, target_id, target_freq, target_n, timeLearning, setting_used, n_locks,' +
-        'lock_duration, unlock_action, lock_state, occurrence, time, time_selected, time_next,' +
-        'slider_display_span, n_opened_locker, first_unlock_occurrence, first_unlock_trial, nb_total_click,' +
-        'exp_total_time, mode_used\n'
+    let header = 'date,user_ip,trial_id,block_id,n_trials,n_block,block_size,' +
+        ' target_shape,target_id,target_freq,target_n,timeLearning,setting_used,n_locks,' +
+        'lock_duration,unlock_action,lock_state,occurrence,time,time_selected,time_next,' +
+        'slider_display_span,n_opened_locker,first_unlock_occurrence,first_unlock_trial,nb_total_click,' +
+        'exp_total_time,mode_used\n'
 
     fs.writeFile(path, header, { flag: 'wx' }, function (err) {
         if (err){
