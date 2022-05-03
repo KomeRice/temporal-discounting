@@ -3,6 +3,7 @@ import Circle from "./shapes/circle.js";
 import Square from "./shapes/square.js";
 import Cross from "./shapes/cross.js";
 import GameLog from "./gameLog.js";
+import Timeline from "./components/timeline.js";
 
 class TDGame {
     constructor(settings, ipAddress = null) {
@@ -32,6 +33,13 @@ class TDGame {
         this.startStepTime = Date.now()
         this.allShapesSelectedTime = null
 
+        this.breakStartTime = Date.now()
+        this.lastBreakEndedTime = Date.now()
+        this.timeInBreak = 0
+
+        this.setToBreak = false
+        this.inBreak = false
+
         this.stepClicks = 0
         this.stepMode = "novice"
 
@@ -42,19 +50,28 @@ class TDGame {
 
 
         document.body.addEventListener("mousedown", () => this.addClick())
+
+        let closeBreak = document.querySelector(".infoDivNextButton")
+        closeBreak.addEventListener('click', () => this.endBreak())
     }
 
     tick() {
         // TODO: 20% interval pauses / 2-3mins - Display percentage of timer?
-        // TODO: Remove timer
-        // TODO: Cycle locks
-        let gameLength = Date.now() - this.startTime
-        if(gameLength > this.settings.maxTimer && this.settings.maxTimer !== -1 && !this.gameEnded) {
+        let gameLength = this.getCurrTime()
+        if(Date.now() - this.lastBreakEndedTime > this.settings.breakTimer && !this.setToBreak)
+            this.setToBreak = true
+
+        if(gameLength > this.settings.maxTimer && this.settings.maxTimer !== -1 && !this.gameEnded && !this.inBreak) {
             this.endGame()
         }
     }
 
     nextStep() {
+        if(this.setToBreak && (this.currStep < this.settings.maxStep - 1 || this.settings.maxStep === -1)) {
+            this.startBreak()
+            return
+        }
+
         let timeTakenStep = Date.now() - this.startStepTime
         this.logData(timeTakenStep)
 
@@ -89,7 +106,30 @@ class TDGame {
     }
 
     startBreak() {
-        document.getElementById("breakTime").style.display = "flex"
+        this.inBreak = true
+        this.breakStartTime = Date.now()
+
+        let stepString = this.getCurrStep()
+        if(this.settings.maxStep === -1)
+            stepString = "Uncapped"
+        let timerString = (Timeline.msToSeconds(this.getMaxTime() - this.getCurrTime())) + "s"
+        if(this.settings.maxTimer === -1)
+            timerString = "Uncapped"
+
+        let breakWindow = document.getElementById("breakTime")
+        breakWindow.style.display = "flex"
+        document.getElementById("timeLeft").innerHTML = timerString
+        document.getElementById("currentCompletion").innerHTML = stepString
+    }
+
+    endBreak() {
+        let breakWindow = document.getElementById("breakTime")
+        breakWindow.style.display = "none"
+        this.lastBreakEndedTime = Date.now()
+        this.timeInBreak += this.lastBreakEndedTime - this.breakStartTime
+        this.inBreak = false
+        this.setToBreak = false
+        this.nextStep()
     }
 
     logData(timeTakenStep) {
@@ -306,9 +346,11 @@ class TDGame {
     }
 
     getCurrTime() {
+        if(this.inBreak)
+            return this.breakStartTime - this.startTime - this.timeInBreak
         if(this.gameEnded)
             return this.settings.maxTimer
-        return Date.now() - this.startTime
+        return Date.now() - this.startTime - this.timeInBreak
     }
 
     getCurrStep(){

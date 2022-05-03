@@ -16,11 +16,6 @@ function updateIntroMsg(nTask, formsList) {
     document.getElementById("shapeList").innerHTML = "(" + formsList + ")";
 }
 
-function updateBreakBox(timeLeft, currentCompletion) {
-    document.getElementById("timeLeft").innerHTML = timeLeft
-    document.getElementById("currentCompletion").currentCompletion = currentCompletion
-}
-
 
 //--------------------------------------------------------------------------------
 //                  GAME variables to post in the database
