@@ -3,29 +3,23 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>IHM expert - Tutorial</title>
+    <title>User study in Human-Computer Interaction - Tutorial</title>
     <link rel="stylesheet" href="rsc/assets/css/main.css">
 </head>
 
 <body>
     <div class="blackBG"></div>
     <div id="explainGameBox" class="infoBox">
-        <div class="infoTitle">TUTO 3 : Unlock the Second Method</div>
+        <div class="infoTitle">Tutorial: Unlocking Expert Mode</div>
         <div id="part1">
             <pre>
-We will now learn how to unlock the second method. Initially, the second 
-method associated with each symbol is not available. It is locked by several lockers (2 lockers 
-in this tutorial). 
+During the experiment, Expert Mode is not unlocked by default.
+Expert Mode may be unlocked for each shape by removing each of its corresponding locks.
+Unlock progress is not shared between shapes.
 </pre>
             <pre>
-At each trial you can unlock only one locker by 
+On every step, you may remove a lock for the ongoing target shape by committing time to perform a small task.
 </pre>
-            <pre>
-1- clicking on the button “unlock” and then
-</pre>
-            <pre>
-2- moving the handle of the slider <b>back and forth until</b> the locker is white and opened.
-            </pre>
 
             <div class="infoDivButton">
                 <button class="infoButton" onclick="nextSlide()">NEXT</button>
@@ -34,23 +28,22 @@ At each trial you can unlock only one locker by
 
         <div id="part2" style="display: none;">
             <pre>
-Follow these steps to unlock the <b>second</b> method :
+To unlock the <b>Expert</b> mode:
                 </pre>
             <pre class="condition" id="tuto3step1">
-1. Select all the forms corresponding to the target form.
+1. Click on every shape in the grid matching the target.
             </pre>
-            <pre id="tuto3step2" class="condition">2. Here, instead of clicking on the next button, click on the unlock button 
-underneath the target symbol.</pre>
+            <pre id="tuto3step2" class="condition">2. Instead of clicking "Next", click on the "Unlock" shown below the target.
+A slider will then be taking its place.</pre>
             <pre id="tuto3step3" class="condition">
-3. The slider that just appear need to be 'slided' to unlock one padlock.
-So slide the slider back and forth (from the right to the left then from the left to the right) <b>until</b> it 
-disappear and a padlock turn white.
+3. Click and move the slider's handle back and forth until it disappears.
+The task will be completed and a lock for the shape will be removed.
                 </pre>
             <pre id="tuto3step4" class="condition">
-4. Now click on the next button and reiterate that process one more time.
+4. Repeat until all locks are removed.
                 </pre>
             <pre id="tuto3step5" class="condition">
-5. Use the second mode for this form.
+5. Expert Mode may now be used to complete the step.
                 </pre>
 
 
@@ -69,7 +62,7 @@ disappear and a padlock turn white.
 
         </div>
         <div id="buttonRedoTuto3" class="infoDivButton" style="display: none;">
-            <button class="infoButton" onclick="redoTuto3()">Retry the last tutorial<i class="fa fa-repeat"></i></button>
+            <button class="infoButton" onclick="redoTuto3()">Retry last tutorial<i class="fa fa-repeat"></i></button>
         </div>
 		
         <div id="endTuto" class="infoDivButton" style="display: none; margin-top:3px">
