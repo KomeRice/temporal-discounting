@@ -83,6 +83,8 @@ class Timeline {
     }
 
     draw() {
+        if(!this.gameInst.settings.showTimeline)
+            return
         this.drawBoard()
         this.drawStep()
         this.indexer.draw()
