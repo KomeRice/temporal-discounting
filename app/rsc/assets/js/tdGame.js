@@ -56,23 +56,30 @@ class TDGame {
         closeBreak.addEventListener('click', () => this.endBreak())
     }
 
+    // Called every frame
     tick() {
+        // When the time runs out, set to end game on next step
         if(Date.now() - this.lastBreakEndedTime > this.settings.breakTimer && !this.setToBreak)
             this.setToBreak = true
     }
 
+    // Handles the transition between steps
     nextStep() {
+        // If the timer ran out
         if(this.getCurrTime() > this.settings.maxTimer && this.settings.maxTimer !== -1 && !this.gameEnded && !this.inBreak) {
             let timeTakenStep = Date.now() - this.startStepTime
             this.logData(timeTakenStep)
             this.endGame()
         }
+
+        // If a break has been queued, interrupt next step setup and go to break screen instead
         if(this.setToBreak && (this.currStep < this.settings.maxStep - 1 || this.settings.maxStep === -1)) {
             this.endedStepTime = Date.now()
             this.targetCanvas.destroySlider()
             this.startBreak()
             return
         }
+        // Process time taken for the just completed step
         let timeTakenStep = Date.now() - this.startStepTime
         if(this.endedStepTime){
             timeTakenStep = this.endedStepTime - this.startStepTime
@@ -80,22 +87,30 @@ class TDGame {
         }
         this.logData(timeTakenStep)
 
+        // If a maximum number of step is set and has been crossed, end the game
         if(this.currStep > this.settings.maxStep - 1 && this.settings.maxStep !== -1 && !this.gameEnded)
             this.endGame()
 
+        // Reset metrics
         this.stepClicks = 0
+        // Reset mode used to novice
         this.stepMode = "novice"
         this.startStepTime = Date.now()
+        // Disable nextButton
         this.nextButton.disabled = true
         this.initNewStep()
     }
 
+    // Called when the game has ended
     endGame() {
         this.gameEnded = true
+        // Log endgame state
         this.gameLog.registerEnd(this.currStep, Date.now() - this.startTime)
         document.getElementById("endGame").style.display = "flex"
+        // Kill dynamic elements in target canvas
         this.targetCanvas.gameEndHandle()
 
+        // Save data to log file
         let data = this.gameLog.exportAsString()
         let options = {
             method: 'POST',
@@ -110,6 +125,7 @@ class TDGame {
         })
     }
 
+    // Starts a break, preventing user from starting a new step until the popup is closed.
     startBreak() {
         this.inBreak = true
         this.breakStartTime = Date.now()
@@ -127,6 +143,7 @@ class TDGame {
         //document.getElementById("currentCompletion").innerHTML = stepString
     }
 
+    // Ends a break, resuming the experiment
     endBreak() {
         let breakWindow = document.getElementById("breakTime")
         breakWindow.style.display = "none"
@@ -137,6 +154,7 @@ class TDGame {
         this.nextStep()
     }
 
+    // Logs data to gameLog object
     logData(timeTakenStep) {
         let sliderApparition = this.targetCanvas.getSliderLifetime()
 
@@ -145,7 +163,7 @@ class TDGame {
             , this.stepClicks, this.stepMode, sliderApparition)
     }
 
-
+    // Rollbacks progress for a given shape
     removeLock(shape){
         let index = this.settings.shapeNames.indexOf(shape)
         if(index === -1){
@@ -158,6 +176,7 @@ class TDGame {
         }
     }
 
+    // Adds progress for a given shape
     shapeUnlockOne(shape = this.currShape){
         let index = this.settings.shapeNames.indexOf(shape)
         if(index === -1){
@@ -171,6 +190,7 @@ class TDGame {
         }
     }
 
+    // Gets the current progress for a shape name
     getLockState(shape) {
         let index = this.settings.shapeNames.indexOf(shape)
         if(index === -1){
@@ -180,6 +200,7 @@ class TDGame {
         return this.lockStates[index]
     }
 
+    // Returns whether a certain shape is unlocked, uses current target shape if none provided
     isShapeUnlocked(shape = this.currShape){
         return this.getLockState(shape) === this.settings.nbLocks
     }
@@ -213,18 +234,21 @@ class TDGame {
         this.nextButton.addEventListener('click', () => this.nextStep())
     }
 
+    // Handles new step initialization
     initNewStep(){
         if(this.playfield === null){
             console.log("Playfield must be bound before initialising game step")
             return
         }
-
+        // Fill backlog when it runs low
         if(this.gridBacklog.length < this.sumWeight()){
             for(let i = 0; i < 10; i++)
                 this.generateBlock()
         }
 
+        // Refresh timeline
         this.timeline.refreshTimeline()
+        // Pops a grid from queue
         this.currShape = this.shapeBacklog.shift()
         this.currShapeGrid = this.gridBacklog.shift()
 
@@ -234,6 +258,7 @@ class TDGame {
         this.currStep++
     }
 
+    // Generate a block from the shapes' weights
     generateBlock() {
         let newBlockShapes = []
         for(let i = 0; i < this.settings.weights.length; i++){
@@ -251,6 +276,7 @@ class TDGame {
         }
     }
 
+    // Generate a grid, made from a number of target shapes and randomly generated other ones
     generateGrid(targetShape){
         if(this.playfield === null){
             console.log("Playfield must be bound before generating a grid")
